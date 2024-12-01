@@ -1,0 +1,7 @@
+# Rust Folders
+debug/
+target/
+cargo.lock
+
+# Input Files
+*.txt
