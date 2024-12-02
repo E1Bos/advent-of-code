@@ -4,7 +4,7 @@ import os
 def calcDistance(point1: int, point2: int) -> int:
     return abs(point1 - point2)
 
-def part1(lines):
+def part1(lines) -> None:
     leftSide, rightSide = [], []
     for line in lines:
         split = [x.strip() for x in line.split(" ") if x != '']
