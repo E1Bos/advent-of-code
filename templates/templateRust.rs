@@ -1,10 +1,19 @@
 use std::{env, fs};
 
-fn parse_input(input: String) -> X {}
+fn parse_input(input: String) -> Vec<String> {
+    input
+        .lines()
+        .map(|line| line.split_whitespace().collect())
+        .collect()
+}
 
-fn part1(input) -> X {}
+fn part1(input: &Vec<String>) {
+    println!("Part 1");
+}
 
-fn part2(input) -> X {}
+fn part2(input: &Vec<String>) {
+    println!("Part 2");
+}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -14,6 +23,6 @@ fn main() {
 
     let parsed_input = parse_input(input);
 
-    part1(parsed_input);
-    part2(parsed_input);
+    part1(&parsed_input);
+    part2(&parsed_input);
 }
