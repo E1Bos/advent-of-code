@@ -1,29 +1,27 @@
 import os
 
-def parseInput(input: str):
+def parse_input(lines: str) -> list:
+    return lines.splitlines()
+
+def part1(lines: list) -> None:
     pass
 
-def part1(lines) -> None:
-    pass
-
-def part2(lines) -> None:
+def part2(lines: list) -> None:
     pass
 
 
 def main():
     input_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
 
-    if os.path.exists(input_file_path):
-        with open(input_file_path, "r") as f:
-            lines = f.readlines()
-    else:
-        print("Error: input.txt file does not exist")
+    if not os.path.exists(input_file_path):
+        print("Error: input file does not exist")
         return
 
-    parsedInput = parseInput(lines)
+    with open(input_file_path, "r") as f:
+        lines = parse_input(f.read())
 
-    part1(parsedInput)
-    part2(parsedInput)
+    part1(lines)
+    part2(lines)
 
 if __name__ == "__main__":
     main()
