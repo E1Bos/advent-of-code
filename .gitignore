@@ -5,3 +5,9 @@ cargo.lock
 
 # Input Files
 *.txt
+
+# Python
+*.pyc
+
+# VSCode
+.vscode
