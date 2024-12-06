@@ -17,7 +17,9 @@ def parseInput(lines: str) -> tuple[dict[str, list[str]], list[list[str]]]:
     return rules_dict, updates
 
 
-def findInvalidPosition(update: list[str], rules: dict[str, list[str]]) -> tuple[int, str] | None:
+def findInvalidPosition(
+    update: list[str], rules: dict[str, list[str]]
+) -> tuple[int, str] | None:
     for i in range(len(update)):
         current_num = update[i]
         if current_num in rules:
@@ -44,7 +46,7 @@ def swapInvalid(update: list[str], rules: dict[str, list[str]]) -> None:
 def solve(rules: dict[str, list[str]], updates: list[list[str]]) -> None:
     part_1 = 0
     part_2 = 0
-    
+
     for update in updates:
         if isValidRule(update, rules):
             middle_char = update[len(update) // 2]
@@ -59,10 +61,10 @@ def solve(rules: dict[str, list[str]], updates: list[list[str]]) -> None:
 
 
 def main() -> None:
-    input_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+    inputFilePath = os.path.join(os.path.dirname(__file__), "input.txt")
 
-    if os.path.exists(input_file_path):
-        with open(input_file_path, "r") as f:
+    if os.path.exists(inputFilePath):
+        with open(inputFilePath, "r") as f:
             lines = f.read()
     else:
         print("Error: input.txt file does not exist")

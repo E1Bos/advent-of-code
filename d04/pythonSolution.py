@@ -41,14 +41,14 @@ def part1(lines) -> None:
     print(f"Part 1: {total}")
 
 
-def part2(lines)-> None:
+def part2(lines) -> None:
     height = len(lines)
     width = len(lines[0])
 
     def isValidCross(row, col) -> bool:
         if lines[row][col] != "A":
             return False
-            
+
         upperLeft = lines[row - 1][col - 1]
         upperRight = lines[row - 1][col + 1]
         downLeft = lines[row + 1][col - 1]
@@ -65,11 +65,11 @@ def part2(lines)-> None:
     print(f"Part 2: {total}")
 
 
-def main()-> None:
-    input_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+def main() -> None:
+    inputFilePath = os.path.join(os.path.dirname(__file__), "input.txt")
 
-    if os.path.exists(input_file_path):
-        with open(input_file_path, "r") as f:
+    if os.path.exists(inputFilePath):
+        with open(inputFilePath, "r") as f:
             lines = f.read()
     else:
         print("Error: input.txt file does not exist")

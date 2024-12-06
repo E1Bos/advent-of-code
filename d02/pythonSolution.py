@@ -1,5 +1,6 @@
 import os
 
+
 def isSafe(input: list[int]) -> bool:
     sortedInput = sorted(input)
     sameDirection = (input == sortedInput) or (input[::-1] == sortedInput)
@@ -52,10 +53,10 @@ def oldSolve(lines) -> None:
 
 
 def main():
-    input_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+    inputFilePath = os.path.join(os.path.dirname(__file__), "input.txt")
 
-    if os.path.exists(input_file_path):
-        with open(input_file_path, "r") as f:
+    if os.path.exists(inputFilePath):
+        with open(inputFilePath, "r") as f:
             lines = f.readlines()
     else:
         print("Error: input.txt file does not exist")

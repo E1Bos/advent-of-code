@@ -1,6 +1,6 @@
 import os
 
-def parse_input(lines: str) -> list:
+def parseInput(lines: str) -> list:
     return lines.splitlines()
 
 def part1(lines: list) -> None:
@@ -11,14 +11,14 @@ def part2(lines: list) -> None:
 
 
 def main():
-    input_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+    inputFilePath = os.path.join(os.path.dirname(__file__), "input.txt")
 
-    if not os.path.exists(input_file_path):
+    if not os.path.exists(inputFilePath):
         print("Error: input file does not exist")
         return
 
-    with open(input_file_path, "r") as f:
-        lines = parse_input(f.read())
+    with open(inputFilePath, "r") as f:
+        lines = parseInput(f.read())
 
     part1(lines)
     part2(lines)
