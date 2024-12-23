@@ -43,9 +43,9 @@ class PuzzleReader:
             PuzzleReader.__is_valid_file(file_path)
         except (FileNotFoundError, ValueError) as e:
             (
-                PuzzleReader.console.print(f"[on red] ERROR [/on red] {e}")
+                PuzzleReader.console.print(f"[black on red] ERROR [/black on red] {e}")
                 if not is_test
-                else PuzzleReader.console.print(f"[on yellow] WARNING [/on yellow] {e}")
+                else PuzzleReader.console.print(f"[black on yellow] WARNING [/black on yellow] {e}")
             )
             return None
 
@@ -86,10 +86,10 @@ class PuzzleReader:
         try:
             PuzzleReader.__is_valid_file(file_path)
         except FileNotFoundError as e:
-            PuzzleReader.console.print(f"[on red] ERROR [/on red] {e}")
+            PuzzleReader.console.print(f"[black on red] ERROR [/black on red] {e}")
             exit(1)
         except ValueError as e:
-            PuzzleReader.console.print(f"[on yellow] WARNING [/on yellow] {e}")
+            PuzzleReader.console.print(f"[black on yellow] WARNING [/black on yellow] {e}")
             return None
 
         result: Any = [line.strip("\n") for line in open(file_path, "r").readlines()]

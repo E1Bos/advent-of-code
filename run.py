@@ -23,10 +23,10 @@ def main() -> None:
     console: Console = Console()
 
     def print_error(message: str) -> None:
-        console.print(f"[on red] ERROR [/on red] {message}\n", style="red")
+        console.print(f"[black on red] ERROR [/black on red] {message}\n", style="red")
 
     def print_ok(message: str) -> None:
-        console.print(f"[on green] OK [/on green] {message}\n", style="green")
+        console.print(f"[black on green] OK [/black on green] {message}\n", style="green")
 
     parser: ArgumentParser = ArgumentParser(description="Advent of Code CLI")
     parser.add_argument(
@@ -149,13 +149,16 @@ def main() -> None:
         parts = [1, 2]
 
     width = console.width
+    horizontal_spacers: str = '─' * ((width - 20) // 2)
     console.print(
-        f"[bold green]{'─' * ((width - 20) // 2)} [yellow]*[/yellow] Advent of Code [yellow]*[/yellow] {'─' * ((width - 20) // 2)}",
+        f"{horizontal_spacers} [yellow]*[/yellow] Advent of Code [yellow]*[/yellow] {horizontal_spacers}",
         justify="center",
+        style="green",
     )
     console.print(
-        f"[green] Running Day [cyan]{args.year}/{args.day}[/cyan] | Part {" and ".join(map(str, parts))}",
+        f"Running Day [cyan]{args.year}/{args.day}[/cyan] | Part {" and ".join(map(str, parts))}",
         justify="center",
+        style="green"
     )
     console.print()
 
@@ -172,22 +175,23 @@ def main() -> None:
             answer: Any = solution.solve(part)
 
         if answer is not None:
-            answer_text = f"[on green] RESULT [/on green] {answer}"
+            answer_text = f"[black on green] RESULT [/black on green] {answer}"
 
             if args.timeit:
                 elapsed = default_timer() - start_time
-                answer_text += f"\n[on blue]  TIME  [/on blue] [blue not bold]{elapsed:.4f}s[/blue not bold]"
+                answer_text += f"\n[black on blue]  TIME  [/black on blue] [blue not bold]{elapsed:.4f}s[/blue not bold]"
 
             answer_panel = Panel(
                 answer_text,
-                style="bold green",
-                title=f"[on green] FINISHED [/on green] [bold]Part {part} [/bold]",
+                style="green",
+                border_style="green",
+                title=f"[black on green] FINISHED [/black on green] [bold]Part {part} [/bold]",
             )
             console.print(answer_panel)
 
         if args.copy_result and answer is not None and len(parts) == 1:
             copy(str(answer))
-            console.print(" Answer Copied ", style="on blue")
+            console.print(" Answer Copied ", style="black on blue")
 
     console.print()
     exit(0)

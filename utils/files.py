@@ -71,7 +71,7 @@ class Files:
                 f.write(template_content)
         else:
             Files.console.print(
-                f"[on yellow] WARNING [/on yellow] File already exists: [cyan]{file_path}[/cyan]"
+                f"[black on yellow] WARNING [/black on yellow] File already exists: [cyan]{file_path}[/cyan]"
             )
 
     @staticmethod

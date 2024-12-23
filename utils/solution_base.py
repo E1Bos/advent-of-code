@@ -100,7 +100,7 @@ class SolutionBase:
                 result = func(parsed_test_input)
 
         if result == expected_result:
-            self.console.print(f"[on green] OK [/on green] Test for part {part} passed")
+            self.console.print(f"[black on green] OK [/black on green] Test for part {part} passed")
         else:
             result_str: str = str(result)
             expected_str: str = str(expected_result)
@@ -118,14 +118,22 @@ class SolutionBase:
             if len(result_str) > len(expected_str):
                 diff_str += f"[red bold]{result_str[len(expected_str):]}[/red bold]"
 
-            error_panel = Panel(
-                f"[bold red]Output:[/bold red]   {result}"
-                f"[bold green]Expected:[/bold green] {expected_result}"
-                f"[bold blue]Diff:[/bold blue]     {diff_str}",
-                title=f"[on red] ERROR [/on red] Test for part {part} failed",
-                border_style="red",
+            self.console.print(
+                f"[black on red] ERROR [/black on red] Test for part {part} failed" \
+                f"\n[bold red]Output:[/bold red]   {result}" \
+                f"\n[bold green]Expected:[/bold green] {expected_result}" \
+                f"\n[bold blue]Diff:[/bold blue]     {diff_str}",
             )
-            self.console.print(error_panel)
+            
+            # Panel used for errors
+            # error_panel = Panel(
+            #     f"[bold red]Output:[/bold red]   {result}\n"
+            #     f"[bold green]Expected:[/bold green] {expected_result}\n"
+            #     f"[bold blue]Diff:[/bold blue]     {diff_str}",
+            #     title=f"[black on red] ERROR [/black on red] Test for part {part} failed",
+            #     border_style="red",
+            # )
+            # self.console.print(error_panel)
             return False
 
         self.is_test = False
