@@ -22,10 +22,9 @@ def main() -> None:
 
     console: Console = Console()
 
-        
     def print_error(message: str) -> None:
         console.print(f"[on red] ERROR [/on red] {message}\n", style="red")
-    
+
     def print_ok(message: str) -> None:
         console.print(f"[on green] OK [/on green] {message}\n", style="green")
 
@@ -168,7 +167,7 @@ def main() -> None:
         if not passed_test:
             continue
 
-        with console.status(f"[bold green]Running P{part}...", spinner="dots"):
+        with console.status(f"[bold green]Running P{part}...\n", spinner="dots"):
             start_time: float = default_timer()
             answer: Any = solution.solve(part)
 

@@ -93,7 +93,7 @@ class SolutionBase:
         parsed_test_input = self.parse(test_input)
         self.is_part_1 = True if part == 1 else False
 
-        with self.console.status(f"[bold yellow]Testing P{part}...", spinner="dots"):
+        with self.console.status(f"[bold yellow]Testing P{part}...\n", spinner="dots"):
             if self.profile_it and self.only_test:
                 result = self.profile(func, parsed_test_input)
             else:
