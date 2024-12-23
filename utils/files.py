@@ -70,7 +70,9 @@ class Files:
             with open(file_path, "w+") as f:
                 f.write(template_content)
         else:
-            Files.console.print(f"[on yellow] WARNING [/on yellow] File already exists: {file_path}")
+            Files.console.print(
+                f"[on yellow] WARNING [/on yellow] File already exists: {file_path}"
+            )
 
     @staticmethod
     def get_path() -> Path:

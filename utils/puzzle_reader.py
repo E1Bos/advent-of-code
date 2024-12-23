@@ -121,9 +121,11 @@ class PuzzleReader:
             ValueError: If the file is empty.
         """
         relative_path: str = os.path.relpath(file_path)
-        
+
         if not file_path.exists:
             raise FileNotFoundError(f"File not found: [cyan]{relative_path}[/cyan]")
 
         if file_path.stat().st_size == 0:
-            raise ValueError(f"File is empty: [cyan]{relative_path}[/cyan]. [yellow bold]Skipping...[/yellow bold]")
+            raise ValueError(
+                f"File is empty: [cyan]{relative_path}[/cyan]. [yellow bold]Skipping...[/yellow bold]"
+            )

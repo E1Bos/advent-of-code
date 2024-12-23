@@ -21,6 +21,7 @@ def split_groups(text: str) -> list[list[str]]:
     """
     return [group.strip().splitlines() for group in text.split("\n\n") if group.strip()]
 
+
 def comma_separated(text: str) -> list[str]:
     """
     Extracts all comma-separated substrings from the given text and returns them as a list of strings.
@@ -36,6 +37,7 @@ def comma_separated(text: str) -> list[str]:
         ['one', 'two, 'three', 'four', 'five']
     """
     return [s.strip() for s in text.split(",")]
+
 
 def extract_words(text: str) -> list[str]:
     """
@@ -87,6 +89,7 @@ def extract_numbers_with_signs(text: str) -> list[int]:
     """
     return list(map(int, re.findall(r"[-+]?\d+", text)))
 
+
 def extract_numbers_to_string(text: str) -> str:
     """
     Extracts all numbers from the given text and returns them as a string.
@@ -102,7 +105,7 @@ def extract_numbers_to_string(text: str) -> str:
         "2 5"
     """
     return "".join(re.findall(r"\d+", text))
-    
+
 
 def find_in_grid(grid: list[list[Any]], target: Any) -> tuple[int, int] | None:
     """
@@ -124,21 +127,24 @@ def find_in_grid(grid: list[list[Any]], target: Any) -> tuple[int, int] | None:
             return i, row.index(target)
     return None
 
-def outside_grid(grid: list[list[Any]] | tuple[int, int] | int, row: int, col: int) -> bool:
+
+def outside_grid(
+    grid: list[list[Any]] | tuple[int, int] | int, row: int, col: int
+) -> bool:
     if isinstance(grid, int):
         return row < 0 or col < 0 or row >= grid or col >= grid
-    
+
     if isinstance(grid, tuple):
         return row < 0 or col < 0 or row >= grid[0] or col >= grid[1]
-    
+
     if isinstance(grid, list):
         return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
-    
+
     raise TypeError("Grid must be a list or tuple")
 
 
 # def is_outside_grid(grid: list[list[Any]], row: int, col: int) -> bool:
-    # return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
+# return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
 
 
 def find_in_grid_or_error(grid: list[list[Any]], target: Any) -> tuple[int, int]:
