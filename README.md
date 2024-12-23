@@ -19,8 +19,8 @@ Each solution implementation has 4 main components:
 
 - The field `raw_input` determines whether the input is read as a raw string or is split into a list by line.
 - The method `parse()` determines how the input is parsed. By default, it will return the input as is, but can be modified to fit your use case.
-- The method `part1()` is your solution to part 1, which returns the solution.
-- The method `part2()` is your solution to part 2, which returns the solution.
+- The method `part1()` is your solution to part 1, and returns the solution.
+- The method `part2()` is your solution to part 2, and returns the solution.
 
 ## Usage
 
