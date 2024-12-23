@@ -5,13 +5,13 @@ from argparse import ArgumentParser, Namespace
 from importlib import import_module
 from pathlib import Path
 from timeit import default_timer
+from pyperclip import copy
 
 from rich.console import Console
 from rich.panel import Panel
 
 from utils.files import Files
 from utils.solution_base import SolutionBase
-from pyperclip import copy
 
 
 def main() -> None:
@@ -24,10 +24,10 @@ def main() -> None:
 
         
     def print_error(message: str) -> None:
-        console.print(f"[on red] ERROR [/on red] {message}", style="red")
+        console.print(f"[on red] ERROR [/on red] {message}\n", style="red")
     
     def print_ok(message: str) -> None:
-        console.print(f"[on green] OK [/on green] {message}", style="green")
+        console.print(f"[on green] OK [/on green] {message}\n", style="green")
 
     parser: ArgumentParser = ArgumentParser(description="Advent of Code CLI")
     parser.add_argument(
@@ -108,6 +108,8 @@ def main() -> None:
 
     args: Namespace = parser.parse_args()
 
+    console.print()
+
     if not 0 < args.day < 26:
         print_error("Day must be between 1 and 25")
         exit(1)
@@ -119,13 +121,13 @@ def main() -> None:
         exit(1)
 
     if 14 <= args.year < 100:
-        args.year = args.year % 100 + 2000
+        args.year = 2000 + args.year
 
     solution_path: Path = Path(f"solutions/{args.year:04d}/{args.day:02d}.py")
 
     if args.create or (CREATE_IF_NOT_EXISTS and not solution_path.exists()):
         Files.create_day(args.year, args.day)
-        print_ok(f"Created files for [cyan]{args.year}/{args.day}")
+        print_ok(f"Created files for [cyan]{args.year}/{args.day}[/cyan]")
         exit(0)
 
     if not solution_path.exists():
@@ -188,6 +190,7 @@ def main() -> None:
             copy(str(answer))
             console.print(" Answer Copied ", style="on blue")
 
+    console.print()
     exit(0)
 
 
