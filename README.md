@@ -6,8 +6,8 @@
 
 This repo contains all my advent of code solutions.
 
-- Solutions are stored in the form `./solutions/YYYY/DD.py`.
-- Puzzle input and test inputs and answers is stored in `./data/YYYY/DD/`.
+- Solutions are stored as `./solutions/YYYY/DD.py`.
+- Puzzle input, test inputs and test answers are stored in `./data/YYYY/DD/`.
 
 The `./utils` folder contains my python template, and the classes used to create new folders and files, read the puzzle inputs, and the base class solution implementation. It also contains `helper_functions.py`, which (as the name suggests), contains helper functions.
 
@@ -19,8 +19,8 @@ Each solution implementation has 4 main components:
 
 - The field `raw_input` determines whether the input is read as a raw string or is split into a list by line.
 - The method `parse()` determines how the input is parsed. By default, it will return the input as is, but can be modified to fit your use case.
-- The method `part1()` is your solution to part 1, which returns the expected output.
-- The method `part2()` is your solution to part 2, which returns the expected output.
+- The method `part1()` is your solution to part 1, which returns the solution.
+- The method `part2()` is your solution to part 2, which returns the solution.
 
 ## Usage
 
