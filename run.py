@@ -183,7 +183,7 @@ def main() -> None:
 
             answer_panel = Panel(
                 answer_text,
-                style="green",
+                style="bold green",
                 border_style="green",
                 title=f"[black on green] FINISHED [/black on green] [bold]Part {part} [/bold]",
             )
