@@ -1,0 +1,2 @@
+rich==13.9.4
+pyinstrument==5.0.0
