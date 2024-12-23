@@ -153,7 +153,7 @@ def main() -> None:
     console.print(
         f"{horizontal_spacers} [yellow]*[/yellow] Advent of Code [yellow]*[/yellow] {horizontal_spacers}",
         justify="center",
-        style="green",
+        style="green bold",
     )
     console.print(
         f"Running Day [cyan]{args.year}/{args.day}[/cyan] | Part {" and ".join(map(str, parts))}",
