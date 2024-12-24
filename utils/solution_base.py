@@ -1,8 +1,8 @@
 from utils.puzzle_reader import PuzzleReader
 from typing import Any, Callable
 from rich.console import Console
-from rich.panel import Panel
 from pyinstrument import Profiler
+# from rich.panel import Panel
 
 
 class SolutionBase:

@@ -5,8 +5,8 @@ from argparse import ArgumentParser, Namespace
 from importlib import import_module
 from pathlib import Path
 from timeit import default_timer
-from pyperclip import copy
 
+from pyperclip import copy
 from rich.console import Console
 from rich.panel import Panel
 
