@@ -47,16 +47,21 @@ class SolutionBase:
         if puzzle_input == None:
             return None
 
-        data: Any = self.parse(puzzle_input)
         self.is_part_1 = True if part == 1 else False
+        data: Any = self.parse(puzzle_input)
+        
         func = getattr(self, f"part{part}")
-
-        if self.profile_it:
-            result = self.profile(func, data)
-        else:
-            result = func(data)
+    
+        result = self.run_solution(func, data)
 
         return result
+
+    def run_solution(self, func: Callable, data: Any) -> Any:
+        try:
+            return func(data)
+        except NotImplementedError:
+            self.console.print(f"[black on red] ERROR [/black on red] Part not implemented")
+            return None
 
     def get_test_input(self) -> Any:
         return PuzzleReader.get_input(self.year, self.day, self.raw_input, True)
@@ -90,14 +95,14 @@ class SolutionBase:
             # Return true here so it still runs the solution even if the test result is missing
             return True
 
-        parsed_test_input = self.parse(test_input)
         self.is_part_1 = True if part == 1 else False
+        parsed_test_input = self.parse(test_input)
 
         with self.console.status(f"[bold yellow]Testing P{part}...\n", spinner="dots"):
-            if self.profile_it and self.only_test:
-                result = self.profile(func, parsed_test_input)
-            else:
-                result = func(parsed_test_input)
+            result = self.run_solution(func, parsed_test_input)
+        
+        if result is None:
+            return False
 
         if result == expected_result:
             self.console.print(f"[black on green] OK [/black on green] Test for part {part} passed")

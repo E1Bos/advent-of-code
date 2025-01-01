@@ -207,7 +207,21 @@ def char_frequency(text: str) -> dict[str, int]:
     return {char: text.count(char) for char in text}
 
 
-def lmap(func, *iterables):
+def lmap(func, *iterables) -> list[Any]:
+    """
+    Maps the given function to the elements of the input iterables and returns the results as a list.
+    
+    Args:
+        func: The function to apply to the elements.
+        *iterables: The input iterables to be processed.
+    
+    Returns:
+        list[Any]: A list of the results after applying the function to the elements of the input iterables.
+    
+    Example:
+        >>> lmap(lambda x: x * 2, [1, 2, 3])
+        [2, 4, 6]
+    """
     return list(map(func, *iterables))
 
 
@@ -363,11 +377,38 @@ def parse_grid(text: Iterable[str]) -> list[list[str]]:
 
 
 def gridify(text: list[str]) -> list[list[str]]:
+    """
+    Converts a list of strings into a 2D list of of characters.
+    
+    Args:
+        text (list[str]): The list of strings.
+
+    Returns:
+        list[list[str]]: A 2D list where each inner list contains the individual characters
+                        from the corresponding input string.
+    
+    Example:
+        >>> gridify(["abc", "def"])
+        [['a', 'b', 'c'], ['d', 'e', 'f']]
+    """
     return [[col for col in row] for row in text]
 
 
 def gridify_ints(text: list[str]) -> list[list[int]]:
-    return [[int(col) for col in row] for row in text]
+    """
+    Converts a list of strings into a 2D list of integers.
+
+    Args:
+        text (list[str]): The list of strings.
+
+    Returns:
+        list[list[int]]: A 2D list of integers.
+
+    Example:
+        >>> gridify_ints(["1 2 3", "4 5 6"])
+        [[1, 2, 3], [4, 5, 6]]
+    """
+    return lmap(lambda row: lmap(int, row), text)
 
 
 def rotate_matrix(matrix: list[list[int]]) -> list[list[int]]:
