@@ -3,11 +3,15 @@ debug/
 target/
 cargo.lock
 
-# Input Files
+# Files
 *.txt
+*.log
+*.bak
 
 # Python
 *.pyc
+.venv/
+venv/
 
 # VSCode
 .vscode
