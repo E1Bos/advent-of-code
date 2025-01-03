@@ -1,10 +1,11 @@
+"""Base class for all solutions."""
+
 # Built-in modules
 from typing import Any, Callable
 from logging import INFO, DEBUG
 from pathlib import Path
 from io import StringIO
 import builtins
-from argparse import Namespace
 
 # Third-party modules
 from pyinstrument import Profiler
@@ -15,6 +16,7 @@ from pyinstrument.session import Session
 # Local modules
 from utils.puzzle_reader import PuzzleReader
 from utils.output_handler import OutputHandler, Logger
+from utils.cli_args import Args
 
 builtin_print = builtins.print
 
@@ -37,8 +39,15 @@ class SolutionBase:
     def __init__(
         self,
         context: OutputHandler,
-        args: Namespace,
+        args: Args,
     ):
+        """
+        Initialize a new instance of the SolutionBase class.
+
+        Args:
+            context (OutputHandler): The output handler for the current run of the program.
+            args (Args): The parsed command-line arguments
+        """
         self.__context = OutputHandler(
             context.console,
             Logger(
@@ -52,7 +61,6 @@ class SolutionBase:
 
         self.__args = args
 
-        self.__args.only_test = args.only_test if not args.skip_test else False
         self.is_test: bool = False
         self.is_part_1: bool = True
 
@@ -61,24 +69,30 @@ class SolutionBase:
             builtins.print = self.print
 
     def parse(self, data: Any) -> Any:
+        """Parse the input data into a usable format."""
         return data
 
     def part1(self, data: Any) -> Any:
+        """Solve part 1 of the puzzle."""
         raise NotImplementedError("Part 1 not implemented")
 
     def part2(self, data: Any) -> Any:
+        """Solve part 2 of the puzzle."""
         raise NotImplementedError("Part 2 not implemented")
 
     def print(self, *args, **kwargs) -> None:
+        """Print and log an info message."""
         contents = SolutionBase.__get_contents(*args, **kwargs)
         self.__context.log(INFO, contents)
 
     def debug(self, *args, **kwargs) -> None:
+        """Print and log a debug message."""
         contents = SolutionBase.__get_contents(*args, **kwargs)
         self.__context.log(DEBUG, contents)
 
     @staticmethod
     def __get_contents(*args, **kwargs) -> str:
+        """Get the contents of the print statement."""
         output = StringIO()
         builtin_print(*args, file=output, **kwargs)
         contents = output.getvalue()
@@ -87,6 +101,7 @@ class SolutionBase:
         return contents[:-1] if contents.endswith("\n") else contents
 
     def solve(self, part: int) -> Any:
+        """Solve the puzzle for the specified part."""
         if self.__args.only_test:
             return
 
@@ -107,6 +122,7 @@ class SolutionBase:
         return result
 
     def __run_solution(self, func: Callable, data: Any) -> Any:
+        """Run the solution function with the specified data."""
         try:
             if self.__args.profile:
                 return self.__profile(func, data)
@@ -116,14 +132,16 @@ class SolutionBase:
             return None
 
     def __get_test_input(self) -> Any:
+        """Get the test input data for the current puzzle."""
         return PuzzleReader.get_input(self.__context, self.__args, self.raw_input, True)
 
     def __get_test_results(self, part: int) -> Any:
+        """Get the expected test results for the current puzzle."""
         return PuzzleReader.get_test_results(self.__context, self.__args, part)
 
     def run_test(self, part: int) -> bool:
         """
-        Runs the test for the specified part of the puzzle.
+        Run the test for the specified part of the puzzle.
 
         Args:
             part (int): The part of the puzzle to test.
@@ -131,9 +149,7 @@ class SolutionBase:
         Returns:
             bool: True if the test passed, False otherwise.
         """
-
         self.is_test: bool = True
-
         test_input: Any = self.__get_test_input()
 
         try:
@@ -215,6 +231,7 @@ class SolutionBase:
         return True
 
     def __profile(self, func: Callable, *args, **kwargs) -> Any:
+        """Profile the solution function."""
         profiler: Profiler = Profiler()
 
         profiler.start()
