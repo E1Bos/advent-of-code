@@ -1,3 +1,5 @@
+"""File containing the OutputHandler and Logger classes."""
+
 # Built-in modules
 from pathlib import Path
 from logging import FileHandler, Formatter, DEBUG, INFO
@@ -9,9 +11,7 @@ from rich.logging import RichHandler
 
 
 class Logger(_Logger):
-    """
-    Custom logger class that inherits from the built-in Python logger.
-    """
+    """Custom logger class that inherits from the built-in Python logger."""
 
     def __init__(
         self,
@@ -20,9 +20,9 @@ class Logger(_Logger):
         log_path: Path | None = None,
         stream_level: int = INFO,
         file_level: int = DEBUG,
-    ):
+    ) -> None:
         """
-        Initializes a new logger instance.
+        Initialize a new logger instance.
 
         Args:
             console (Console, optional): An instance of the rich.console.Console class. Defaults to None.
@@ -69,6 +69,13 @@ class OutputHandler:
     def __init__(
         self, console: Console | None = None, logger: Logger | None = None
     ) -> None:
+        """
+        Initialize a new OutputHandler instance.
+
+        Args:
+            console (Console, optional): An instance of the rich.console.Console class. Defaults to None.
+            logger (Logger, optional): An instance of the Logger class. Defaults to None.
+        """
         self.console = console if console else Console()
         self.logger = (
             logger
@@ -81,6 +88,9 @@ class OutputHandler:
         )
 
     def print_ok(self, *args, end: str = "\n\n", **kwargs) -> None:
+        """
+        Print an ok message to the console.
+        """
         self.console.print(
             "[black on green] OK [/black on green]",
             *args,
@@ -90,6 +100,7 @@ class OutputHandler:
         )
 
     def print_warning(self, *args, end: str = "\n\n", **kwargs) -> None:
+        """Print a warning message to the console."""
         self.console.print(
             "[black on yellow] WARNING [/black on yellow]",
             *args,
@@ -99,6 +110,7 @@ class OutputHandler:
         )
 
     def print_error(self, *args, end: str = "\n\n", **kwargs) -> None:
+        """Print an error message to the console."""
         self.console.print(
             "[black on red] ERROR [/black on red]",
             *args,
@@ -108,6 +120,7 @@ class OutputHandler:
         )
 
     def print_info(self, *args, end: str = "\n\n", **kwargs) -> None:
+        """Print an info message to the console."""
         self.console.print(
             "[black on blue] INFO [/black on blue]",
             *args,
@@ -117,7 +130,9 @@ class OutputHandler:
         )
 
     def print(self, *args, **kwargs) -> None:
+        """Print a message to the console using the rich library."""
         self.console.print(*args, **kwargs)
 
     def log(self, *args, **kwargs) -> None:
+        """Log a message using the logger."""
         self.logger.log(*args, **kwargs)
