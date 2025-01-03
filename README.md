@@ -9,28 +9,44 @@ This repo contains all my advent of code solutions.
 - Solutions are stored as `./solutions/YYYY/DD.py`.
 - Puzzle input, test inputs and test answers are stored in `./data/YYYY/DD/`.
 
-The `./utils` folder contains my python template, and the classes used to create new folders and files, read the puzzle inputs, and the base class solution implementation. It also contains `helper_functions.py`, which (as the name suggests), contains helper functions.
+The `./utils` folder contains multiple helper classes.
+  - `files.py` creates and manages the solution files and data
+  - `puzzle_reader.py` reads the puzzle input
+  - `output_handler.py` manages the output to stdout and to log file
+  - `helper_functions.py` is a list of helper functions that may be helpful in solving problems
+  - `./templates/python_template.py` is the base python template copied when a new day is created
 
 Solutions in other languages may be found in `./solutions/YYYY/language/`.
 
 ## Solution Class
 
-Each solution implementation has 4 main components:
+Each solution implementation has 5 main components:
 
 - The field `raw_input` determines whether the input is read as a raw string or is split into a list by line.
+- The field `skip_empty_tests`, which needs to be added manually, will skip empty tests instead of exiting.
 - The method `parse()` determines how the input is parsed. By default, it will return the input as is, but can be modified to fit your use case.
 - The method `part1()` is your solution to part 1, and returns the solution.
 - The method `part2()` is your solution to part 2, and returns the solution.
 
+
+The solution class also exposes several useful helper methods.
+- `print()` prints to stdout and logs to the log file
+- `debug()` prints to stdout and logs to the log file if the arg `--debug` is used
+
+Additionally, the field `override_print` can be set to `True`, which will override the default `print()` (`builtins.print`) with the solution implementation of print, so that you don't need to call `self.print()`.  
+
+During the execution of each part, the variables `is_test` and `is_part_1` are available so that the execution can change based on those parameters (e.g. grid size being different in the test case)
+
+
 ## Usage
 
-```
+``` bash
 pip install -r requirements.txt
 ```
 
-```
+``` console
 usage: run.py [-h] [-y year_num] [-d day_num] [-p part_num] [-c] [-a] [-t]
-              [--skip] [--create] [-ti] [-pr]
+              [--skip] [--create] [-ti] [-pr] [--debug]
 
 Advent of Code CLI
 
@@ -54,5 +70,6 @@ options:
   -ti, --timeit         Optional, time the solution
   -pr, --profile        Optional, profile the solution and open the results in
                         a browser
-
+  --debug               Optional, allow logging debug messages to stdout from
+                        the solution
 ```
