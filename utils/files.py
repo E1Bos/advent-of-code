@@ -1,37 +1,49 @@
+"""Utility class for file and directory operations."""
+
 # Built-in module
 from pathlib import Path
 
 # Local modules
 from utils.output_handler import OutputHandler
+from utils.cli_args import Args
 
 
 class Files:
-    """
-    Utility class for file and directory operations.
-    """
+    """Utility class for file and directory operations."""
 
     @staticmethod
     def create_day(
-        context: OutputHandler, year: int, day: int, ok_if_exists: bool = False
+        context: OutputHandler, args: Args, ok_if_exists: bool = False
     ) -> None:
         """
-        Creates the necessary files and directories for a new day's puzzle.
+        Create the necessary files and directories for a new day's puzzle.
 
         Args:
-            year (int): The year of the puzzle.
-            day (int): The day of the puzzle.
+            context (OutputHandler): The output handler for the program.
+            args (Args): The parsed command-line arguments.
             ok_if_exists (bool, optional): If True, will overwrite the file if it already exists. Defaults to False.
 
         Raises:
             ValueError: If year is not a 4-digit number.
         """
         path: Path = Files.get_path()
-        year_str: str = str(year)
-        day_str: str = f"{day:02}"
 
-        if len(year_str) != 4:
+        if len(args.year_str) != 4:
             raise ValueError("Year must be a 4-digit number, formatted as YYYY")
 
+        Files.__create_directories(path, args.year_str)
+        Files.__create_data_files(path, args)
+        Files.__create_solution_file(context, path, args, ok_if_exists)
+
+    @staticmethod
+    def __create_directories(path: Path, year_str: str) -> None:
+        """
+        Create the necessary directories for the specified year.
+
+        Args:
+            path (Path): The path to the grandparent directory of the current file.
+            year_str (str): The year as a string.
+        """
         if not Path("data").exists():
             Path("data").mkdir(parents=True, exist_ok=True)
         if not Path("solutions").exists():
@@ -45,34 +57,59 @@ class Files:
         if not solution_folder.exists():
             solution_folder.mkdir(parents=True, exist_ok=True)
 
-        # Create the Data
+    @staticmethod
+    def __create_data_files(path: Path, args: Args) -> None:
+        """
+        Create the necessary data files for the specified year and day.
+
+        Args:
+            path (Path): The path to the grandparent directory of the current file.
+            args (Args): The parsed command-line arguments.
+        """
+        data_folder: Path = Path(path, "data", args.year_str)
         file_names: list[str] = [
-            f"{day_str}_input.txt",
-            f"{day_str}_test_input.txt",
-            f"{day_str}_test_result_1.txt",
-            f"{day_str}_test_result_2.txt",
+            f"{args.day_str}_input.txt",
+            f"{args.day_str}_test_input.txt",
+            f"{args.day_str}_test_result_1.txt",
+            f"{args.day_str}_test_result_2.txt",
         ]
 
-        data_folder_day: Path = Path(data_folder, day_str)
+        data_folder_day: Path = Path(data_folder, args.day_str)
         if not data_folder_day.exists():
             data_folder_day.mkdir(parents=True, exist_ok=True)
 
         for file in file_names:
-            file_path: Path = Path(data_folder, day_str, file)
+            file_path: Path = Path(data_folder, args.day_str, file)
             if not file_path.exists():
                 file_path.touch()
 
-        # Create the Solution
+    @staticmethod
+    def __create_solution_file(
+        context: OutputHandler,
+        path: Path,
+        args: Args,
+        ok_if_exists: bool,
+    ) -> None:
+        """
+        Create a new solution file for the specified year and day.
 
+        Args:
+            context (OutputHandler): The output handler for the program.
+            path (Path): The path to the grandparent directory of the current file.
+            args (Args): The parsed command-line arguments.
+            ok_if_exists (bool): If True, will overwrite the file if it already exists.
+        """
+        solution_folder: Path = Path(path, "solutions", args.year_str)
         template_file: Path = Path("utils/templates/python_template.py")
 
+        template_content: str = ""
         if template_file.exists():
             with open(template_file, "r") as f:
-                template_content: str = f.read()
-        else:
-            template_content: str = ""
+                template_content = f.read()
 
-        file_path: Path = Path(solution_folder, f"{day_str}.py")
+        template_content = Files.__edit_template(template_content)
+
+        file_path: Path = Path(solution_folder, f"{args.day_str}.py")
         if not file_path.exists() or ok_if_exists:
             with open(file_path, "w+") as f:
                 f.write(template_content)
@@ -81,9 +118,29 @@ class Files:
             context.print_warning(f"File already exists: [cyan]{file_path}[/cyan]")
 
     @staticmethod
+    def __edit_template(template: str) -> str:
+        """
+        Adjust the template content to fit the current solution.
+
+        Args:
+            template (int): The template content.
+
+        Returns:
+            str: The adjusted template content.
+        """
+        remove_strings: list[str] = [
+            "# noqa",
+        ]
+
+        for string in remove_strings:
+            template = template.replace(string, "")
+
+        return template
+
+    @staticmethod
     def get_path() -> Path:
         """
-        Returns the grandparent directory of the current file.
+        Return the grandparent directory of the current file.
 
         Returns:
             Path: The grandparent directory of the current file. (Assumes files.py is in a utils subdir)
