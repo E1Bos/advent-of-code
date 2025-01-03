@@ -13,6 +13,8 @@ The `./utils` folder contains multiple helper classes.
   - `files.py` creates and manages the solution files and data
   - `puzzle_reader.py` reads the puzzle input
   - `output_handler.py` manages the output to stdout and to log file
+  - `cli_args.py` is a data structure for the parsed args (so that the variables can have type definitions)
+  - `solution_base.py` is the base class for all solutions
   - `helper_functions.py` is a list of helper functions that may be helpful in solving problems
   - `./templates/python_template.py` is the base python template copied when a new day is created
 
