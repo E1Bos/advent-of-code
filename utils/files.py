@@ -1,12 +1,19 @@
+# Built-in module
 from pathlib import Path
-from rich.console import Console
+
+# Local modules
+from utils.output_handler import OutputHandler
 
 
 class Files:
-    console = Console()
+    """
+    Utility class for file and directory operations.
+    """
 
     @staticmethod
-    def create_day(year: int, day: int, ok_if_exists: bool = False) -> None:
+    def create_day(
+        context: OutputHandler, year: int, day: int, ok_if_exists: bool = False
+    ) -> None:
         """
         Creates the necessary files and directories for a new day's puzzle.
 
@@ -69,15 +76,23 @@ class Files:
         if not file_path.exists() or ok_if_exists:
             with open(file_path, "w+") as f:
                 f.write(template_content)
+            context.print_ok(f"Created file: [cyan]{file_path}[/cyan] and data files")
         else:
-            Files.console.print(
-                f"[black on yellow] WARNING [/black on yellow] File already exists: [cyan]{file_path}[/cyan]"
-            )
+            context.print_warning(f"File already exists: [cyan]{file_path}[/cyan]")
 
     @staticmethod
     def get_path() -> Path:
         """
-        Returns the parent directory of the current file.
+        Returns the grandparent directory of the current file.
+
+        Returns:
+            Path: The grandparent directory of the current file. (Assumes files.py is in a utils subdir)
         """
-        # Assumes files.py is in a utils subdir
-        return Path(__file__).parent.parent
+        parent: Path = Path(__file__).parent
+
+        if parent.name == "utils":
+            return parent.parent
+
+        raise ValueError(
+            f"Expected parent directory of {__file__} to be 'utils', but found '{parent.name}'"
+        )
