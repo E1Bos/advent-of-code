@@ -1,32 +1,32 @@
+"""Contains the PuzzleReader class for reading puzzle input and expected test results."""
+
 # Built-in modules
 from os import path as os_path
 from pathlib import Path
 from typing import Any
-from argparse import Namespace
 
 # Local modules
+from utils.cli_args import Args
 from utils.files import Files
 from utils.output_handler import OutputHandler
 
 
 class PuzzleReader:
-    """
-    Utility class for reading input data and expected test results for puzzle solutions
-    """
+    """Utility class for reading input data and expected test results for puzzle solutions."""
 
     @staticmethod
     def get_input(
         context: OutputHandler,
-        args: Namespace,
+        args: Args,
         raw_input: bool,
         is_test: bool = False,
     ) -> list[str] | str | None:
         """
-        Retrieves the input data for a specific year and day of the puzzle.
+        Retrieve the input data for a specific year and day of the puzzle.
 
         Args:
-            context (ExecutionContext): The execution context for the current run of the program.
-            args (Namespace): The parsed command-line arguments.
+            context (OutputHandler): The output handler for the current run of the program.
+            args (Args): The parsed command-line arguments.
             raw_input (bool): If True, the raw input data will be returned as a single string. If False, the input data will be returned as a list of strings.
             is_test (bool, optional): If True, the test input data will be retrieved. Defaults to False.
 
@@ -36,21 +36,23 @@ class PuzzleReader:
         Raises:
             FileNotFoundError: If the file corresponding to the specified year and day does not exist.
         """
+        file_name: str = (
+            f"{args.day_str}_input.txt"
+            if not is_test
+            else f"{args.day_str}_test_input.txt"
+        )
 
-        year: str = f"{args.year:04d}"
-        day: str = f"{args.day:02d}"
-
-        file_name: str = f"{day}_input.txt" if not is_test else f"{day}_test_input.txt"
-
-        file_path: Path = Path(Files.get_path(), "data", f"{year}", f"{day}", file_name)
+        file_path: Path = Path(
+            Files.get_path(), "data", args.year_str, args.day_str, file_name
+        )
 
         try:
             PuzzleReader.__is_valid_file(file_path)
         except (FileNotFoundError, ValueError) as e:
             (
-                context.print_error(f"{e}")
+                context.print_error(str(e))
                 if not is_test
-                else context.print_warning(f"{e}")
+                else context.print_warning(str(e))
             )
             return None
 
@@ -61,13 +63,13 @@ class PuzzleReader:
                 return [line.strip("\n") for line in f.readlines()]
 
     @staticmethod
-    def get_test_results(context: OutputHandler, args: Namespace, part: int) -> Any:
+    def get_test_results(context: OutputHandler, args: Args, part: int) -> Any:
         """
-        Retrieves the expected test results for a specific year, day, and part of the puzzle.
+        Retrieve the expected test results for a specific year, day, and part of the puzzle.
 
         Args:
-            context (ExecutionContext): The execution context for the current run of the program.
-            args (Namespace): The parsed command-line arguments.
+            context (OutputHandler): The output handler for the current run of the program.
+            args (Args): The parsed command-line arguments.
             part (int): The part of the puzzle for which the test results are being retrieved.
 
         Returns:
@@ -76,16 +78,13 @@ class PuzzleReader:
         Raises:
             FileNotFoundError: If the file corresponding to the specified year, day, and part does not exist.
         """
-        year: str = f"{args.year:04d}"
-        day: str = f"{args.day:02d}"
-
-        file_name: str = f"{day}_test_result_{part}.txt"
+        file_name: str = f"{args.day_str}_test_result_{part}.txt"
 
         folder_path: Path = Path(
             Files.get_path(),
             "data",
-            f"{year}",
-            f"{day}",
+            args.year_str,
+            args.day_str,
         )
 
         file_path: Path = Path(folder_path, file_name)
@@ -127,7 +126,7 @@ class PuzzleReader:
         """
         relative_path: str = os_path.relpath(file_path)
 
-        if not file_path.exists:
+        if not file_path.exists():
             raise FileNotFoundError(f"File not found: [cyan]{relative_path}[/cyan]")
 
         if file_path.stat().st_size == 0:
