@@ -39,13 +39,13 @@ class Solution(SolutionBase):
             mid = (left + right) // 2
 
             steps = self.solve_grid(grid_size, all_bad_spaces[:mid])
-            if steps == None:
+            if steps is None:
                 last_impossible = mid
                 right = mid - 1
             else:
                 left = mid + 1
 
-        if last_impossible != None:
+        if last_impossible is not None:
             bad_x, bad_y = h.extract_numbers(data[last_impossible - 1])
             return f"{bad_x},{bad_y}"
 

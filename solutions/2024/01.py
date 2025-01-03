@@ -1,5 +1,6 @@
 from utils.solution_base import SolutionBase
 import utils.helper_functions as h
+from collections import defaultdict
 
 
 class Solution(SolutionBase):
@@ -24,28 +25,23 @@ class Solution(SolutionBase):
         total: int = 0
         for i in range(len(left_side)):
             total += self.calculate_distance(left_side[i], right_side[i])
-
         return total
 
     def part2(self, data: list[str]) -> int:
-        left_side, similarity_score = [], {}
+        left_side: list[int] = []
+        similarity_score: defaultdict[int, int] = defaultdict(int)
+
         for line in data:
-            (
-                left_num,
-                right_num,
-            ) = h.extract_numbers(line)
+            left_num, right_num = h.extract_numbers(line)
 
             left_side.append(left_num)
-
-            if right_num in similarity_score:
-                similarity_score[right_num] += 1
-            else:
-                similarity_score[right_num] = 1
+            similarity_score[right_num] += 1
 
         total: int = 0
         for i in range(len(left_side)):
             number = left_side[i]
-            if number in similarity_score:
-                total += similarity_score[number] * number
+            total += similarity_score.get(number, 0) * number
+
+        self.debug(similarity_score)
 
         return total

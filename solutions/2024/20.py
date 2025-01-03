@@ -52,7 +52,6 @@ class Solution(SolutionBase):
     def get_possible_jumps_at(
         self, grid: list[list[str]], current_pos: tuple[int, int], cheat_distance: int
     ) -> set[tuple[int, tuple[int, int]]]:
-
         jumps = set()
 
         while cheat_distance > 1:

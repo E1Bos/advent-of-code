@@ -4,6 +4,7 @@ import utils.helper_functions as h
 
 class Solution(SolutionBase):
     raw_input: bool = True
+    skip_empty_tests: bool = True
 
     def parse(self, data: str) -> tuple[dict[str, int], list[int]]:
         register_data, program_data = h.split_groups(data)
