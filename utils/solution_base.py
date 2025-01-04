@@ -49,14 +49,14 @@ class SolutionBase:
             args (Args): The parsed command-line arguments
         """
         self.__context = OutputHandler(
-            context.console,
-            Logger(
+            logger=Logger(
                 name=f"{args.year}-{args.day}-solution",
                 console=context.console if args.debug else None,
                 log_path=Path("logs/log.log") if args.debug else None,
                 stream_level=DEBUG,
                 file_level=DEBUG,
             ),
+            console=context.console,
         )
 
         self.__args = args
@@ -189,9 +189,7 @@ class SolutionBase:
             return False
 
         if result == expected_result:
-            self.__context.print(
-                f"[black on green] OK [/black on green] Test for part {part} passed"
-            )
+            self.__context.print_ok(f"Test for part {part} passed", end="\n")
         else:
             result_str: str = str(result)
             expected_str: str = str(expected_result)

@@ -66,67 +66,44 @@ class OutputHandler:
         logger (Logger): The logger object to log messages.
     """
 
-    def __init__(
-        self, console: Console | None = None, logger: Logger | None = None
-    ) -> None:
+    def __init__(self, logger: Logger, console: Console | None = None) -> None:
         """
         Initialize a new OutputHandler instance.
 
         Args:
+            logger (Logger): An instance of the Logger class.
             console (Console, optional): An instance of the rich.console.Console class. Defaults to None.
-            logger (Logger, optional): An instance of the Logger class. Defaults to None.
         """
+        self.logger = logger
         self.console = console if console else Console()
-        self.logger = (
-            logger
-            if logger
-            else Logger(
-                name="main-runner",
-                log_path=Path("logs/log.log"),
-                file_level=INFO,
-            )
-        )
 
     def print_ok(self, *args, end: str = "\n\n", **kwargs) -> None:
         """
         Print an ok message to the console.
         """
-        self.console.print(
-            "[black on green] OK [/black on green]",
-            *args,
-            **kwargs,
-            end=end,
-            style="green",
-        )
+        self.__print_with_block("OK", "green", *args, **kwargs)
 
-    def print_warning(self, *args, end: str = "\n\n", **kwargs) -> None:
+    def print_warning(self, *args, **kwargs) -> None:
         """Print a warning message to the console."""
-        self.console.print(
-            "[black on yellow] WARNING [/black on yellow]",
-            *args,
-            **kwargs,
-            end=end,
-            style="yellow",
-        )
+        self.__print_with_block("WARNING", "yellow", *args, **kwargs)
 
-    def print_error(self, *args, end: str = "\n\n", **kwargs) -> None:
+    def print_error(self, *args, **kwargs) -> None:
         """Print an error message to the console."""
-        self.console.print(
-            "[black on red] ERROR [/black on red]",
-            *args,
-            **kwargs,
-            end=end,
-            style="red",
-        )
+        self.__print_with_block("ERROR", "red", *args, **kwargs)
 
-    def print_info(self, *args, end: str = "\n\n", **kwargs) -> None:
+    def print_info(self, *args, **kwargs) -> None:
         """Print an info message to the console."""
+        self.__print_with_block("INFO", "blue", *args, **kwargs)
+
+    def __print_with_block(
+        self, block_text: str, block_color: str, *args, **kwargs
+    ) -> None:
+        """Print a message with a colored block to the console."""
         self.console.print(
-            "[black on blue] INFO [/black on blue]",
+            f"[black on {block_color}] {block_text} [/black on {block_color}]",
             *args,
             **kwargs,
-            end=end,
-            style="blue",
+            style=block_color,
         )
 
     def print(self, *args, **kwargs) -> None:
