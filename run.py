@@ -21,7 +21,7 @@ except ImportError:
 # Local modules
 from utils.files import Files
 from utils.solution_base import SolutionBase
-from utils.output_handler import OutputHandler
+from utils.output_handler import OutputHandler, Logger
 from utils.cli_args import Args
 
 
@@ -127,17 +127,23 @@ def parse_arguments() -> Args:
 
 
 def validate_arguments(context: OutputHandler, args: Args) -> None:
+    valid: bool = True
     if not 0 < args.day < 26:
         context.print_error("Day must be between 1 and 25")
         context.log(ERROR, f"Day out of range: {args.day}")
-        exit(1)
+        valid = False
 
     if not 2014 <= args.year and not 14 <= args.year < 100:
         context.print_error(
-            "Year must be a 2-digit number starting at 14 or a 4-digit number starting at 2014"
+            "Year must be between 14-99 or 2014-2099"
         )
         context.log(ERROR, f"Invalid year: {args.year}")
-        exit(1)
+        valid = False
+
+    if args.part not in [1, 2]:
+        context.print_error("Part must be either 1 or 2")
+        context.log(ERROR, f"Invalid part: {args.part}")
+        valid = False
 
     if 14 <= args.year < 100:
         args.year = 2000 + args.year
@@ -151,7 +157,7 @@ def validate_arguments(context: OutputHandler, args: Args) -> None:
         context.print_info(
             "To create the necessary files for the specified year and day, use the --create flag"
         )
-        exit(1)
+        valid = False
 
     day_specified = any(arg.startswith(("-d", "--day")) for arg in sys_argv[1:])
     if date.today().month != 12 and not day_specified:
@@ -159,6 +165,10 @@ def validate_arguments(context: OutputHandler, args: Args) -> None:
         context.print_warning(
             "It is not currently December, please specify a day using -d or --day"
         )
+        valid = False
+
+    if not valid:
+        context.print()
         exit(1)
 
 
@@ -276,7 +286,13 @@ def main() -> None:
 
     args: Args = parse_arguments()
 
-    context = OutputHandler()
+    context = OutputHandler(
+        logger=Logger(
+            name="main-runner",
+            log_path=Path("logs/log.log"),
+            file_level=INFO,
+        )
+    )
 
     context.print()
 
