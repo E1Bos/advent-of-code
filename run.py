@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Built-in modules
 from types import ModuleType
 from typing import Any
@@ -128,15 +130,14 @@ def parse_arguments() -> Args:
 
 def validate_arguments(context: OutputHandler, args: Args) -> None:
     valid: bool = True
+
     if not 0 < args.day < 26:
         context.print_error("Day must be between 1 and 25")
         context.log(ERROR, f"Day out of range: {args.day}")
         valid = False
 
     if not 2014 <= args.year and not 14 <= args.year < 100:
-        context.print_error(
-            "Year must be between 14-99 or 2014-2099"
-        )
+        context.print_error("Year must be between 14-99 or 2014-2099")
         context.log(ERROR, f"Invalid year: {args.year}")
         valid = False
 
@@ -168,7 +169,6 @@ def validate_arguments(context: OutputHandler, args: Args) -> None:
         valid = False
 
     if not valid:
-        context.print()
         exit(1)
 
 
@@ -320,7 +320,7 @@ def main() -> None:
         style="green bold",
     )
     context.print(
-        f"Running Day [cyan]{args.year}/{args.day_str}[/cyan] | Part {" and ".join(map(str, parts))}",
+        f"Running Day [cyan]{args.year}/{args.day_str}[/cyan] | Part {' and '.join(map(str, parts))}",
         justify="center",
         style="green",
     )
@@ -329,7 +329,6 @@ def main() -> None:
     run_solution(context, solution, parts, args)
 
     context.logger.info("All parts processed, exiting.")
-    context.print()
 
 
 if __name__ == "__main__":
