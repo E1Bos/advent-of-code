@@ -210,14 +210,14 @@ def char_frequency(text: str) -> dict[str, int]:
 def lmap(func, *iterables) -> list[Any]:
     """
     Maps the given function to the elements of the input iterables and returns the results as a list.
-    
+
     Args:
         func: The function to apply to the elements.
         *iterables: The input iterables to be processed.
-    
+
     Returns:
         list[Any]: A list of the results after applying the function to the elements of the input iterables.
-    
+
     Example:
         >>> lmap(lambda x: x * 2, [1, 2, 3])
         [2, 4, 6]
@@ -379,14 +379,14 @@ def parse_grid(text: Iterable[str]) -> list[list[str]]:
 def gridify(text: list[str]) -> list[list[str]]:
     """
     Converts a list of strings into a 2D list of of characters.
-    
+
     Args:
         text (list[str]): The list of strings.
 
     Returns:
         list[list[str]]: A 2D list where each inner list contains the individual characters
                         from the corresponding input string.
-    
+
     Example:
         >>> gridify(["abc", "def"])
         [['a', 'b', 'c'], ['d', 'e', 'f']]

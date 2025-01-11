@@ -77,7 +77,7 @@ class OutputHandler:
         self.logger = logger
         self.console = console if console else Console()
 
-    def print_ok(self, *args, end: str = "\n\n", **kwargs) -> None:
+    def print_ok(self, *args, **kwargs) -> None:
         """
         Print an ok message to the console.
         """

@@ -202,10 +202,10 @@ class SolutionBase:
                     diff_str += exp_char
 
             if len(result_str) < len(expected_str):
-                diff_str += f"[red bold]{expected_str[len(result_str):]}[/red bold]"
+                diff_str += f"[red bold]{expected_str[len(result_str) :]}[/red bold]"
 
             if len(result_str) > len(expected_str):
-                diff_str += f"[red bold]{result_str[len(expected_str):]}[/red bold]"
+                diff_str += f"[red bold]{result_str[len(expected_str) :]}[/red bold]"
 
             self.__context.print(
                 f"[black on red] ERROR [/black on red] Test for part {part} failed"
