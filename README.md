@@ -2,7 +2,7 @@
   <h1>Advent of Code</h1> 
 </div>
 
-## File Structure
+## 📁 File Structure
 
 This repo contains all my advent of code solutions.
 
@@ -20,7 +20,7 @@ The `./utils` folder contains multiple helper classes.
 
 Solutions in other languages may be found in `./solutions/YYYY/language/`.
 
-## Solution Class
+## 🏠 Solution Class
 
 Each solution implementation has 5 main components:
 
@@ -40,7 +40,7 @@ Additionally, the field `override_print` can be set to `True`, which will overri
 During the execution of each part, the variables `is_test` and `is_part_1` are available so that the execution can change based on those parameters (e.g. grid size being different in the test case)
 
 
-## Usage
+## 🚀 Usage
 
 ``` bash
 pip install -r requirements.txt
@@ -74,4 +74,25 @@ options:
                         a browser
   --debug               Optional, allow logging debug messages to stdout from
                         the solution
+```
+
+## 🐧 Linux
+
+Change permissions so the scripts can be executed:
+```bash
+chmod +x run.py aoc
+```
+
+On Ubuntu, install xclip for clipboard support:
+```bash
+sudo apt-get install xclip
+```
+> I am running Linux Mint (Ubuntu). This is what I had to do, your mileage may vary.
+
+
+You can then run the script with:
+```bash
+./run.py [args]
+# or
+./aoc [args] 
 ```
