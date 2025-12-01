@@ -32,7 +32,6 @@ Each solution implementation has 5 main components:
 
 
 The solution class also exposes several useful helper methods.
-- `print()` prints to stdout and logs to the log file
 - `debug()` prints to stdout and logs to the log file if the arg `--debug` is used
 
 Additionally, the field `override_print` can be set to `True`, which will override the default `print()` (`builtins.print`) with the solution implementation of print, so that you don't need to call `self.print()`.  
