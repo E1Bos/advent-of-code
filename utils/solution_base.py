@@ -51,9 +51,9 @@ class SolutionBase:
         self.__context = OutputHandler(
             logger=Logger(
                 name=f"{args.year}-{args.day}-solution",
-                console=context.console if args.debug else None,
+                console=context.console,
                 log_path=Path("logs/log.log") if args.debug else None,
-                stream_level=DEBUG,
+                stream_level=DEBUG if args.debug else INFO,
                 file_level=DEBUG,
             ),
             console=context.console,
