@@ -2,12 +2,13 @@
   <h1>Advent of Code</h1> 
 </div>
 
-## 📁 File Structure
+## File Structure
 
 This repo contains all my advent of code solutions.
 
 - Solutions are stored as `./solutions/YYYY/DD.py`.
 - Puzzle input, test inputs and test answers are stored in `./data/YYYY/DD/`.
+  - Puzzle input is not committed to the repo as reqested by [AoC](https://adventofcode.com/2025/about#faq_copying).
 
 The `./utils` folder contains multiple helper classes.
 
@@ -21,7 +22,7 @@ The `./utils` folder contains multiple helper classes.
 
 Solutions in other languages may be found in `./solutions/YYYY/language/`.
 
-## 🏠 Solution Class
+## Solution Class
 
 Each solution implementation has 5 main components:
 
@@ -40,10 +41,14 @@ Additionally, the field `override_print` can be set to `True`, which will overri
 
 During the execution of each part, the variables `is_test` and `is_part_1` are available so that the execution can change based on those parameters (e.g. grid size being different in the test case)
 
-## 🚀 Usage
+## Usage
+
+I highly recommend using UV to run this project (and generally any python project). I use it, you should too. [More on UV here](https://github.com/astral-sh/uv).
 
 ```bash
-pip install -r requirements.txt
+uv venv .venv;
+.\.venv\Scripts\activate;
+uv run .\main.py -h
 ```
 
 ```console
