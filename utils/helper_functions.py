@@ -190,6 +190,53 @@ def is_palindrome(text: str) -> bool:
     return text == text[::-1]
 
 
+def is_repeated_substring(
+    text: str, starting_size: int = 1, num_substrings: int | None = None
+) -> bool:
+    """
+    Checks if the given string can be constructed by repeating a substring.
+
+    Args:
+        text (str): The string to be checked.
+        starting_size (int): The size of the substring to start checking from (default is 1). Only used if num_substrings is None.
+        num_substrings (int | None): If set, only consider dividing the string into exactly this many substrings. If None, check all possible divisions (default behavior).
+
+    Returns:
+        bool: True if the string can be constructed by repeating a substring (with the given number of substrings or starting size if specified), False otherwise.
+
+    Example:
+        >>> is_repeated_substring("ababab")
+        True
+        >>> is_repeated_substring("abcde")
+        False
+        >>> is_repeated_substring("565656", num_substrings=2)
+        False
+        >>> is_repeated_substring("565656", num_substrings=3)
+        True
+    """
+    if starting_size < 1:
+        raise ValueError("starting_size must be at least 1")
+
+    if starting_size != 1 and num_substrings is not None:
+        raise ValueError("starting_size and num_substrings cannot both be set")
+
+    if starting_size > len(text) // 2:
+        return False
+
+    length: int = len(text)
+    if num_substrings is not None:
+        if length % num_substrings != 0 or num_substrings < 2:
+            return False
+        size = length // num_substrings
+        return text == text[:size] * num_substrings
+    else:
+        for index in range(starting_size, length // 2 + 1):
+            if length % index == 0:
+                if text[:index] * (length // index) == text:
+                    return True
+        return False
+
+
 def char_frequency(text: str) -> dict[str, int]:
     """
     Returns a dictionary where the keys are the unique characters in the given text and the values are their respective frequencies.
