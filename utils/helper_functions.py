@@ -408,13 +408,13 @@ def modular_inverse(a: int, m: int) -> int:
 
 def parse_grid(text: Iterable[str]) -> list[list[str]]:
     """
-    Parses the given text into a 2D list of integers.
+    Parses the given text into a 2D list of strings.
 
     Args:
         text (str): The text to be parsed into a 2D list of strings.
 
     Returns:
-        list[list[str]]: A 2D list of integers parsed from the given text.
+        list[list[str]]: A 2D list of strings parsed from the given text.
 
     Example:
         >>> parse_grid("1 2 3\n4 5 6")
@@ -500,7 +500,7 @@ def transpose_matrix(matrix: list[list[int]]) -> list[list[int]]:
     return [list(row) for row in zip(*matrix)]
 
 
-def find_adjacent(matrix: list[list[int]], row: int, col: int) -> list[tuple[int, int]]:
+def find_adjacent(matrix: list[list[int]], row: int, col: int, include_diagonal: bool = False) -> list[tuple[int, int]]:
     """
     Finds all adjacent cells in the given matrix.
 
@@ -508,6 +508,7 @@ def find_adjacent(matrix: list[list[int]], row: int, col: int) -> list[tuple[int
         matrix (list[list[int]]): A 2D list representing the matrix to search in.
         row (int): The row of the cell to search from.
         col (int): The column of the cell to search from.
+        diagonal (bool): Whether to include diagonal adjacent cells (default is False).
 
     Returns:
         list[tuple[int, int]]: A list of all adjacent cells (up, down, left, right) as tuples of (row, col).
@@ -525,6 +526,15 @@ def find_adjacent(matrix: list[list[int]], row: int, col: int) -> list[tuple[int
         adjacent.append((row, col - 1))
     if col < len(matrix[0]) - 1:
         adjacent.append((row, col + 1))
+    if include_diagonal:
+        if row > 0 and col > 0:
+            adjacent.append((row - 1, col - 1))
+        if row > 0 and col < len(matrix[0]) - 1:
+            adjacent.append((row - 1, col + 1))
+        if row < len(matrix) - 1 and col > 0:
+            adjacent.append((row + 1, col - 1))
+        if row < len(matrix) - 1 and col < len(matrix[0]) - 1:
+            adjacent.append((row + 1, col + 1))
     return adjacent
 
 
