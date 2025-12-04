@@ -500,7 +500,9 @@ def transpose_matrix(matrix: list[list[int]]) -> list[list[int]]:
     return [list(row) for row in zip(*matrix)]
 
 
-def find_adjacent(matrix: list[list[int]], row: int, col: int, include_diagonal: bool = False) -> list[tuple[int, int]]:
+def find_adjacent(
+    matrix: list[list[int]], row: int, col: int, include_diagonal: bool = False
+) -> list[tuple[int, int]]:
     """
     Finds all adjacent cells in the given matrix.
 
