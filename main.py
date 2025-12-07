@@ -256,13 +256,18 @@ def run_solution(
         ):
             start_time: float = default_timer()
             answer: Any = solution.solve(part)
+            elapsed = default_timer() - start_time
 
         if answer is not None:
             answer_text = f"[black on green] RESULT [/black on green] {answer}"
 
-            elapsed = default_timer() - start_time
             if args.timeit:
-                answer_text += f"\n[black on blue]  TIME  [/black on blue] [blue not bold]{elapsed:.4f}s[/blue not bold]"
+                if elapsed < 0.1:
+                    elapsed = f"{elapsed * 1000:.2f}ms"
+                else:
+                    elapsed = f"{elapsed:.4f}s"
+
+                answer_text += f"\n[black on blue]  TIME  [/black on blue] [blue not bold]{elapsed}[/blue not bold]"
 
             answer_panel = Panel(
                 answer_text,
@@ -270,10 +275,11 @@ def run_solution(
                 border_style="green",
                 title=f"[black on green] FINISHED [/black on green] [bold]Part {part} [/bold]",
             )
+
             context.print(answer_panel)
             context.log(
                 INFO,
-                f"Year {args.year} | Day {args.day} | Part {part} | Answer: {answer} | Time: {elapsed:.10f}s",
+                f"Year {args.year} | Day {args.day} | Part {part} | Answer: {answer} | Time: {elapsed}",
             )
 
         if args.copy_result and answer is not None and len(parts) == 1:
@@ -282,7 +288,7 @@ def run_solution(
 
 
 def main() -> None:
-    CREATE_IF_NOT_EXISTS: bool = False
+    CREATE_IF_NOT_EXISTS: bool = True
 
     args: Args = parse_arguments()
 
