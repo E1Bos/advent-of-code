@@ -1,12 +1,11 @@
 from utils.solution_base import SolutionBase
 import utils.helper_functions as h
-from typing import Any
 
 
 class Solution(SolutionBase):
     raw_input: bool = True
 
-    def parse(self, data: list[str]) -> Any:
+    def parse(self, data: str) -> list[tuple[int, int]]:
         parsed: list[str] = h.comma_separated(data)
 
         output: list[tuple[int, int]] = []
@@ -17,7 +16,7 @@ class Solution(SolutionBase):
 
         return output
 
-    def part1(self, data: list[int]) -> int:
+    def part1(self, data: list[tuple[int, int]]) -> int:
         solution: int = 0
 
         for left, right in data:
@@ -32,7 +31,7 @@ class Solution(SolutionBase):
 
         return solution
 
-    def part2(self, data: list[int]) -> int:
+    def part2(self, data: list[tuple[int, int]]) -> int:
         solution: int = 0
 
         for left, right in data:

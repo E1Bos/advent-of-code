@@ -501,16 +501,16 @@ def transpose_matrix(matrix: list[list[int]]) -> list[list[int]]:
 
 
 def find_adjacent(
-    matrix: list[list[int]], row: int, col: int, include_diagonal: bool = False
+    matrix: list[list[Any]], row: int, col: int, include_diagonal: bool = False
 ) -> list[tuple[int, int]]:
     """
     Finds all adjacent cells in the given matrix.
 
     Args:
-        matrix (list[list[int]]): A 2D list representing the matrix to search in.
+        matrix (list[list[Any]]): A 2D list representing the matrix to search in.
         row (int): The row of the cell to search from.
         col (int): The column of the cell to search from.
-        diagonal (bool): Whether to include diagonal adjacent cells (default is False).
+        include_diagonal (bool): Whether to include diagonal adjacent cells (default is False).
 
     Returns:
         list[tuple[int, int]]: A list of all adjacent cells (up, down, left, right) as tuples of (row, col).
