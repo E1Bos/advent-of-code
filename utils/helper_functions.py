@@ -1,5 +1,5 @@
 import re
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 
 # region String Processing
@@ -16,7 +16,7 @@ def split_groups(text: str) -> list[list[str]]:
         list[list[str]]: A list of lists where each inner list contains the lines of a group.
 
     Example:
-        >>> split_groups("Group 1 line 1\nGroup 1 line 2\n\nGroup 2 line 1")
+        >>> split_groups("Group 1 line 1\\nGroup 1 line 2\\n\\nGroup 2 line 1")
         [['Group 1 line 1', 'Group 1 line 2'], ['Group 2 line 1']]
     """
     return [group.strip().splitlines() for group in text.split("\n\n") if group.strip()]
@@ -33,8 +33,8 @@ def comma_separated(text: str) -> list[str]:
         list[str]: A list of strings extracted from the given text.
 
     Example:
-        >>> comma_separated("one, two, three,four, five")
-        ['one', 'two, 'three', 'four', 'five']
+        >>> comma_separated("one, two, three, four, five")
+        ['one', 'two', 'three', 'four', 'five']
     """
     return [s.strip() for s in text.split(",")]
 
@@ -84,8 +84,8 @@ def extract_numbers_with_signs(text: str) -> list[int]:
         list[int]: A list of integers extracted from the given text.
 
     Example:
-        >>> extract_numbers("There are 2 apples and 5 oranges.")
-        [2, 5]
+        >>> extract_numbers_with_signs("There are -2 apples and 5 oranges.")
+        [-2, 5]
     """
     return list(map(int, re.findall(r"[-+]?\d+", text)))
 
@@ -101,10 +101,10 @@ def extract_numbers_to_string(text: str) -> str:
         str: A string containing all numbers extracted from the given text.
 
     Example:
-        >>> extract_numbers("There are 2 apples and 5 oranges.")
-        "2 5"
+        >>> extract_numbers_to_string("There are 2 apples and 5 oranges.")
+        '2 5'
     """
-    return "".join(re.findall(r"\d+", text))
+    return " ".join(re.findall(r"\d+", text))
 
 
 def find_in_grid(grid: list[list[Any]], target: Any) -> tuple[int, int] | None:
@@ -131,20 +131,29 @@ def find_in_grid(grid: list[list[Any]], target: Any) -> tuple[int, int] | None:
 def outside_grid(
     grid: list[list[Any]] | tuple[int, int] | int, row: int, col: int
 ) -> bool:
+    """
+    Checks if the given row and column indices are outside the bounds of the grid.
+    Args:
+        grid (list[list[Any]] | tuple[int, int] | int): The grid to check against. Can be a 2D list, a tuple of (rows, cols), or an integer representing a square grid size.
+        row (int): The row index to check.
+        col (int): The column index to check.
+    Returns:
+        bool: True if the indices are outside the grid bounds, False otherwise.
+    Example:
+        >>> outside_grid([[1, 2, 3], [4, 5, 6]], 2, 1)
+        True
+        >>> outside_grid((3, 4), 2, 3)
+        False
+        >>> outside_grid(5, 5, 0)
+        True
+    """
     if isinstance(grid, int):
         return row < 0 or col < 0 or row >= grid or col >= grid
 
     if isinstance(grid, tuple):
         return row < 0 or col < 0 or row >= grid[0] or col >= grid[1]
 
-    if isinstance(grid, list):
-        return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
-
-    raise TypeError("Grid must be a list or tuple")
-
-
-# def is_outside_grid(grid: list[list[Any]], row: int, col: int) -> bool:
-# return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
+    return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
 
 
 def find_in_grid_or_error(grid: list[list[Any]], target: Any) -> tuple[int, int]:
@@ -165,7 +174,7 @@ def find_in_grid_or_error(grid: list[list[Any]], target: Any) -> tuple[int, int]
         >>> find_in_grid_or_error([['a', 'b'], ['c', 'd']], 'c')
         (1, 0)
     """
-    pos = find_in_grid(grid, target)
+    pos: tuple[int, int] | None = find_in_grid(grid, target)
     if pos is None:
         raise ValueError(f"Target {target} not found in grid")
     return pos
@@ -227,14 +236,14 @@ def is_repeated_substring(
     if num_substrings is not None:
         if length % num_substrings != 0 or num_substrings < 2:
             return False
-        size = length // num_substrings
+        size: int = length // num_substrings
         return text == text[:size] * num_substrings
-    else:
-        for index in range(starting_size, length // 2 + 1):
-            if length % index == 0:
-                if text[:index] * (length // index) == text:
-                    return True
-        return False
+
+    for index in range(starting_size, length // 2 + 1):
+        if length % index == 0:
+            if text[:index] * (length // index) == text:
+                return True
+    return False
 
 
 def char_frequency(text: str) -> dict[str, int]:
@@ -254,7 +263,7 @@ def char_frequency(text: str) -> dict[str, int]:
     return {char: text.count(char) for char in text}
 
 
-def lmap(func, *iterables) -> list[Any]:
+def lmap(func: Callable[[Any], Any], *iterables: Iterable[Any]) -> list[Any]:
     """
     Maps the given function to the elements of the input iterables and returns the results as a list.
 
@@ -341,13 +350,13 @@ def prime_factors(n: int) -> list[int]:
         [2, 2, 3]
     """
 
-    factors = []
-    i = 2
-    while i * i <= n:
-        while n % i == 0:
-            factors.append(i)
-            n //= i
-        i += 1
+    factors: list[int] = []
+    curr_factor: int = 2
+    while curr_factor * curr_factor <= n:
+        while n % curr_factor == 0:
+            factors.append(curr_factor)
+            n //= curr_factor
+        curr_factor += 1
     if n > 1:
         factors.append(n)
     return factors
@@ -376,9 +385,11 @@ def is_prime(n: int) -> bool:
     """
     if n <= 1 or (n > 2 and n % 2 == 0):
         return False
+
     for i in range(3, int(n**0.5) + 1, 2):
         if n % i == 0:
             return False
+
     return True
 
 
@@ -417,7 +428,7 @@ def parse_grid(text: Iterable[str]) -> list[list[str]]:
         list[list[str]]: A 2D list of strings parsed from the given text.
 
     Example:
-        >>> parse_grid("1 2 3\n4 5 6")
+        >>> parse_grid(["1 2 3", "4 5 6"])
         [['1', '2', '3'], ['4', '5', '6']]
     """
     return [list(row.split()) for row in text]
@@ -455,7 +466,7 @@ def gridify_ints(text: list[str]) -> list[list[int]]:
         >>> gridify_ints(["1 2 3", "4 5 6"])
         [[1, 2, 3], [4, 5, 6]]
     """
-    return lmap(lambda row: lmap(int, row), text)
+    return lmap(lambda row: lmap(int, row.split()), text)
 
 
 def rotate_matrix(matrix: list[list[int]]) -> list[list[int]]:
@@ -472,14 +483,16 @@ def rotate_matrix(matrix: list[list[int]]) -> list[list[int]]:
         >>> rotate_matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         [[7, 4, 1], [8, 5, 2], [9, 6, 3]]
     """
-    n = len(matrix)
-    for i in range(n // 2):
-        for j in range(i, n - i - 1):
-            temp = matrix[i][j]
-            matrix[i][j] = matrix[n - 1 - j][i]
-            matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j]
-            matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i]
-            matrix[j][n - 1 - i] = temp
+    size: int = len(matrix)
+
+    for row in range(size // 2):
+        for col in range(row, size - row - 1):
+            temp = matrix[row][col]
+            matrix[row][col] = matrix[size - 1 - col][row]
+            matrix[size - 1 - col][row] = matrix[size - 1 - row][size - 1 - col]
+            matrix[size - 1 - row][size - 1 - col] = matrix[col][size - 1 - row]
+            matrix[col][size - 1 - row] = temp
+
     return matrix
 
 
@@ -518,8 +531,11 @@ def find_adjacent(
     Example:
         >>> find_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1)
         [(0, 1), (2, 1), (1, 0), (1, 2)]
+        >>> find_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1, True)
+        [(0, 1), (2, 1), (1, 0), (1, 2), (0, 0), (0, 2), (2, 0), (2, 2)]
     """
-    adjacent = []
+    adjacent: list[tuple[int, int]] = []
+
     if row > 0:
         adjacent.append((row - 1, col))
     if row < len(matrix) - 1:
@@ -528,16 +544,58 @@ def find_adjacent(
         adjacent.append((row, col - 1))
     if col < len(matrix[0]) - 1:
         adjacent.append((row, col + 1))
-    if include_diagonal:
-        if row > 0 and col > 0:
-            adjacent.append((row - 1, col - 1))
-        if row > 0 and col < len(matrix[0]) - 1:
-            adjacent.append((row - 1, col + 1))
-        if row < len(matrix) - 1 and col > 0:
-            adjacent.append((row + 1, col - 1))
-        if row < len(matrix) - 1 and col < len(matrix[0]) - 1:
-            adjacent.append((row + 1, col + 1))
+
+    if not include_diagonal:
+        return adjacent
+
+    if row > 0 and col > 0:
+        adjacent.append((row - 1, col - 1))
+    if row > 0 and col < len(matrix[0]) - 1:
+        adjacent.append((row - 1, col + 1))
+    if row < len(matrix) - 1 and col > 0:
+        adjacent.append((row + 1, col - 1))
+    if row < len(matrix) - 1 and col < len(matrix[0]) - 1:
+        adjacent.append((row + 1, col + 1))
+
     return adjacent
+
+
+def get_adjacent(
+    matrix: list[list[Any]],
+    row: int,
+    col: int,
+    include_diagonal: bool = False,
+    include_coords: bool = False,
+) -> list[Any] | list[tuple[Any, int, int]]:
+    """
+    Gets all adjacent cells in the given matrix.
+
+    Args:
+        matrix (list[list[Any]]): A 2D list representing the matrix to search in.
+        row (int): The row of the cell to search from.
+        col (int): The column of the cell to search from.
+        include_diagonal (bool): Whether to include diagonal adjacent cells (default is False).
+        include_coords (bool): Whether to include the coordinates of the adjacent cells in the output (default is False).
+
+    Returns:
+        list[Any] | list[tuple[Any, int, int]]: A list of all adjacent cells (up, down, left, right) with their values or as tuples of (value, row, col).
+
+    Example:
+        >>> get_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1)
+        [2, 8, 4, 6]
+        >>> get_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1, False, True)
+        [(2, 0, 1), (8, 2, 1), (4, 1, 0), (6, 1, 2)]
+        >>> get_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1, True, True)
+        [(2, 0, 1), (8, 2, 1), (4, 1, 0), (6, 1, 2), (1, 0, 0), (3, 0, 2), (7, 2, 0), (9, 2, 2)]
+    """
+    adjacent_coords: list[tuple[int, int]] = find_adjacent(
+        matrix, row, col, include_diagonal
+    )
+
+    if include_coords:
+        return [(matrix[row][col], row, col) for row, col in adjacent_coords]
+
+    return [matrix[row][col] for row, col in adjacent_coords]
 
 
 def system_of_equation(
@@ -560,21 +618,31 @@ def system_of_equation(
         >>> system_of_equation((2, 2), (3, 5), (8, 12))
         (1, 2)
     """
-    det = eq1[0] * eq2[1] - eq1[1] * eq2[0]
+    determinant: int = eq1[0] * eq2[1] - eq1[1] * eq2[0]
 
-    if det == 0:
+    if determinant == 0:
         return None
 
-    a = (goal[0] * eq2[1] - goal[1] * eq2[0]) // det
-    b = (eq1[0] * goal[1] - eq1[1] * goal[0]) // det
+    coeff_a: int = (goal[0] * eq2[1] - goal[1] * eq2[0]) // determinant
+    coeff_b: int = (eq1[0] * goal[1] - eq1[1] * goal[0]) // determinant
 
-    if a < 0 or b < 0:
+    if coeff_a < 0 or coeff_b < 0:
         return None
 
-    if eq1[0] * a + eq2[0] * b == goal[0] and eq1[1] * a + eq2[1] * b == goal[1]:
-        return (a, b)
+    if (
+        eq1[0] * coeff_a + eq2[0] * coeff_b == goal[0]
+        and eq1[1] * coeff_a + eq2[1] * coeff_b == goal[1]
+    ):
+        return (coeff_a, coeff_b)
     return None
 
 
-def print_grid(grid: list[list[Any]]):
+def print_grid(grid: list[list[Any]]) -> None:
+    """Prints the given 2D grid to the console."""
     print("\n".join("".join(str(x) for x in row) for row in grid))
+
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()

@@ -17,7 +17,7 @@ try:
     from pyperclip import copy
     from rich.panel import Panel
 except ImportError:
-    print("Please install the project requirements - `pip install -r requirements.txt`")
+    print("Please install the project requirements - `uv sync`")
     exit(1)
 
 # Local modules
@@ -28,6 +28,7 @@ from utils.cli_args import Args
 
 
 def parse_arguments() -> Args:
+    """Parse command-line arguments and return an Args dataclass instance."""
     parser: ArgumentParser = ArgumentParser(description="Advent of Code CLI")
     parser.add_argument(
         "-y",
@@ -111,7 +112,10 @@ def parse_arguments() -> Args:
         help="Optional, allow logging debug messages to stdout from the solution",
     )
 
-    parsed_args = parser.parse_args()
+    parsed_args, unknown = parser.parse_known_args()
+
+    if unknown:
+        print(f"Warning: Unknown arguments detected: {' '.join(unknown)}")
 
     return Args(
         year=parsed_args.year,
@@ -129,6 +133,7 @@ def parse_arguments() -> Args:
 
 
 def validate_arguments(context: OutputHandler, args: Args) -> None:
+    """Validate the command-line arguments and print/log errors if invalid."""
     valid: bool = True
 
     if not 0 < args.day < 26:
@@ -175,6 +180,7 @@ def validate_arguments(context: OutputHandler, args: Args) -> None:
 def check_and_create_solution_files(
     context: OutputHandler, args: Args, create_if_not_exists: bool = False
 ) -> None:
+    """Check if solution files exist and create them if necessary."""
     solution_path: Path = Path(f"solutions/{args.year}/{args.day_str}.py")
 
     if args.create or (create_if_not_exists and not solution_path.exists()):
@@ -193,6 +199,7 @@ def check_and_create_solution_files(
 def install_missing_module(
     context: OutputHandler, module_name: str, install_all: bool
 ) -> tuple[bool, bool]:
+    """Prompt to install a missing module and install it if confirmed."""
     response: str = "n"
     if not install_all:
         context.print_warning(
@@ -213,6 +220,7 @@ def install_missing_module(
 
 
 def import_solution_module(context: OutputHandler, args: Args) -> ModuleType:
+    """Import the solution module for the specified year and day, installing missing dependencies if necessary."""
     install_all: bool = False
     while True:
         try:
@@ -239,6 +247,7 @@ def import_solution_module(context: OutputHandler, args: Args) -> ModuleType:
 def run_solution(
     context: OutputHandler, solution: SolutionBase, parts: list[int], args: Args
 ) -> None:
+    """Run the solution for the specified parts, including tests and timing."""
     for part in parts:
         context.log(INFO, f"Running Part {part}")
         passed_test: bool = True
@@ -288,6 +297,7 @@ def run_solution(
 
 
 def main() -> None:
+    """Main entry point for the Advent of Code runner."""
     CREATE_IF_NOT_EXISTS: bool = True
 
     args: Args = parse_arguments()
