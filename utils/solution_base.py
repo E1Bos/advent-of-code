@@ -80,18 +80,18 @@ class SolutionBase:
         """Solve part 2 of the puzzle."""
         raise NotImplementedError("Part 2 not implemented")
 
-    def print(self, *args, **kwargs) -> None:
+    def print(self, *args: Any, **kwargs: Any) -> None:
         """Print and log an info message."""
         contents = SolutionBase.__get_contents(*args, **kwargs)
         self.__context.log(INFO, contents)
 
-    def debug(self, *args, **kwargs) -> None:
+    def debug(self, *args: Any, **kwargs: Any) -> None:
         """Print and log a debug message."""
         contents = SolutionBase.__get_contents(*args, **kwargs)
         self.__context.log(DEBUG, contents)
 
     @staticmethod
-    def __get_contents(*args, **kwargs) -> str:
+    def __get_contents(*args: Any, **kwargs: Any) -> str:
         """Get the contents of the print statement."""
         output = StringIO()
         builtin_print(*args, file=output, **kwargs)
@@ -121,7 +121,7 @@ class SolutionBase:
 
         return result
 
-    def __run_solution(self, func: Callable, data: Any) -> Any:
+    def __run_solution(self, func: Callable[[Any], Any], data: Any) -> Any:
         """Run the solution function with the specified data."""
         try:
             if self.__args.profile:
@@ -167,7 +167,7 @@ class SolutionBase:
             )
             return False
 
-        func: Callable = getattr(self, f"part{part}")
+        func: Callable[[Any], Any] = getattr(self, f"part{part}")
 
         if expected_result is None or (
             not isinstance(expected_result, int) and len(expected_result) == 0
@@ -228,7 +228,7 @@ class SolutionBase:
         self.is_test = False
         return True
 
-    def __profile(self, func: Callable, *args, **kwargs) -> Any:
+    def __profile(self, func: Callable[[Any], Any], *args: Any, **kwargs: Any) -> Any:
         """Profile the solution function."""
         profiler: Profiler = Profiler()
 

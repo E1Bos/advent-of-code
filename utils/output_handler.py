@@ -1,6 +1,7 @@
 """File containing the OutputHandler and Logger classes."""
 
 # Built-in modules
+from typing import Any
 from pathlib import Path
 from logging import FileHandler, Formatter, DEBUG, INFO
 from logging import Logger as _Logger
@@ -77,26 +78,26 @@ class OutputHandler:
         self.logger = logger
         self.console = console if console else Console()
 
-    def print_ok(self, *args, **kwargs) -> None:
+    def print_ok(self, *args: Any, **kwargs: Any) -> None:
         """
         Print an ok message to the console.
         """
         self.__print_with_block("OK", "green", *args, **kwargs)
 
-    def print_warning(self, *args, **kwargs) -> None:
+    def print_warning(self, *args: Any, **kwargs: Any) -> None:
         """Print a warning message to the console."""
         self.__print_with_block("WARNING", "yellow", *args, **kwargs)
 
-    def print_error(self, *args, **kwargs) -> None:
+    def print_error(self, *args: Any, **kwargs: Any) -> None:
         """Print an error message to the console."""
         self.__print_with_block("ERROR", "red", *args, **kwargs)
 
-    def print_info(self, *args, **kwargs) -> None:
+    def print_info(self, *args: Any, **kwargs: Any) -> None:
         """Print an info message to the console."""
         self.__print_with_block("INFO", "blue", *args, **kwargs)
 
     def __print_with_block(
-        self, block_text: str, block_color: str, *args, **kwargs
+        self, block_text: str, block_color: str, *args: Any, **kwargs: Any
     ) -> None:
         """Print a message with a colored block to the console."""
         self.console.print(
@@ -106,10 +107,10 @@ class OutputHandler:
             style=block_color,
         )
 
-    def print(self, *args, **kwargs) -> None:
+    def print(self, *args: Any, **kwargs: Any) -> None:
         """Print a message to the console using the rich library."""
         self.console.print(*args, **kwargs)
 
-    def log(self, *args, **kwargs) -> None:
+    def log(self, *args: Any, **kwargs: Any) -> None:
         """Log a message using the logger."""
         self.logger.log(*args, **kwargs)
