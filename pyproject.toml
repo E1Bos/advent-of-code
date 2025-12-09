@@ -11,4 +11,5 @@ dependencies = [
     "pyinstrument>=5.1.1",
     "pyperclip>=1.11.0",
     "rich>=14.2.0",
+    "ruff>=0.14.8",
 ]
