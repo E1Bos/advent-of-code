@@ -11,6 +11,7 @@ from timeit import default_timer
 from logging import DEBUG, INFO, WARNING, ERROR
 from sys import argv as sys_argv
 import subprocess
+import re
 
 # Third-party modules
 try:
@@ -196,14 +197,57 @@ def check_and_create_solution_files(
         exit(1)
 
 
+def get_install_name(solution_path: Path, module_name: str) -> str:
+    """
+    Parse the solution file to find install hints for a module.
+
+    Looks for patterns like:
+        import z3  # {z3-solver}
+        import z3 as z  # {z3-solver}
+        from z3 import ...  # {z3-solver}
+
+    Returns the install name from the comment, or the module name if no hint found.
+    """
+    # Pattern for: import module_name  # {install-name}
+    pattern_import = rf"^import\s+{re.escape(module_name)}\s*#\s*\{{(.+?)\}}"
+
+    # Pattern for: import module_name as alias  # {install-name}
+    pattern_import_as = (
+        rf"^import\s+{re.escape(module_name)}\s+as\s+\w+\s*#\s*\{{(.+?)\}}"
+    )
+
+    # Pattern for: from module_name import ...  # {install-name}
+    pattern_from = rf"^from\s+{re.escape(module_name)}\s+import\s+.+?\s*#\s*\{{(.+?)\}}"
+
+    patterns = [pattern_import_as, pattern_import, pattern_from]
+
+    try:
+        with open(solution_path, "r", encoding="utf-8") as f:
+            for line in f:
+                stripped_line = line.strip()
+                for pattern in patterns:
+                    match = re.match(pattern, stripped_line)
+                    if match:
+                        return match.group(1).strip()
+    except Exception:
+        pass
+
+    return module_name
+
+
 def install_missing_module(
-    context: OutputHandler, module_name: str, install_all: bool
+    context: OutputHandler, module_name: str, install_name: str, install_all: bool
 ) -> tuple[bool, bool]:
     """Prompt to install a missing module and install it if confirmed."""
     response: str = "n"
+    display_name: str = f"[cyan bold]{install_name}[/cyan bold]"
+
+    if install_name != module_name:
+        display_name += f" (for [cyan]{module_name}[/cyan])"
+
     if not install_all:
         context.print_warning(
-            f"Module [cyan bold]{module_name}[/cyan bold] is missing. Would you like to run [green bold]`pip install {module_name}`[/green bold]?\n"
+            f"Module {display_name} is missing. Would you like to run [green bold]`uv pip install {install_name}`[/green bold]?\n"
             "[cyan](y/Y/n):[/cyan] ",
             end="",
         )
@@ -212,16 +256,16 @@ def install_missing_module(
     if not response.lower() == "y" and not install_all:
         return False, False
 
-    context.print_info(
-        f"Installing missing module: [cyan bold]{module_name}[/cyan bold]"
-    )
-    subprocess.check_call(["pip", "install", module_name])
+    context.print_info(f"Installing missing module: {display_name}")
+    subprocess.check_call(["uv", "pip", "install", install_name])
     return True, response.isupper() or install_all
 
 
 def import_solution_module(context: OutputHandler, args: Args) -> ModuleType:
     """Import the solution module for the specified year and day, installing missing dependencies if necessary."""
     install_all: bool = False
+    solution_path: Path = Path(f"solutions/{args.year}/{args.day_str}.py")
+
     while True:
         try:
             return import_module(f"solutions.{args.year}.{args.day_str}")
@@ -229,9 +273,15 @@ def import_solution_module(context: OutputHandler, args: Args) -> ModuleType:
             required_module = str(e).split(" ")[-1].replace("'", "")
             context.log(WARNING, f"Missing module: {required_module}")
 
+            install_name = get_install_name(solution_path, required_module)
+            if install_name != required_module:
+                context.log(
+                    INFO, f"Found install hint: {required_module} -> {install_name}"
+                )
+
             try:
                 success, install_all = install_missing_module(
-                    context, required_module, install_all
+                    context, required_module, install_name, install_all
                 )
             except subprocess.CalledProcessError as e:
                 context.log(ERROR, f"Subprocess error: {e}")
@@ -239,8 +289,8 @@ def import_solution_module(context: OutputHandler, args: Args) -> ModuleType:
                 exit(1)
 
             if not success:
-                context.log(ERROR, f"Failed to install module: {required_module}")
-                context.print_error(f"Failed to install module: {required_module}")
+                context.log(ERROR, f"Failed to install module: {install_name}")
+                context.print_error(f"Failed to install module: {install_name}")
                 exit(1)
 
 
