@@ -52,7 +52,7 @@ class Solution(SolutionBase):
     def get_possible_jumps_at(
         self, grid: list[list[str]], current_pos: tuple[int, int], cheat_distance: int
     ) -> set[tuple[int, tuple[int, int]]]:
-        jumps = set()
+        jumps: set[tuple[int, tuple[int, int]]] = set()
 
         while cheat_distance > 1:
             for cheat_range in range(cheat_distance + 1):
@@ -82,7 +82,7 @@ class Solution(SolutionBase):
 
         time_savings = 100 if not self.is_test else 2 if self.is_part_1 else 50
 
-        paths = set()
+        paths: set[tuple[tuple[int, int], tuple[int, int]]] = set()
 
         for position, distance in path.items():
             for moves, cheat_position in self.get_possible_jumps_at(

@@ -25,13 +25,13 @@ class Solution(SolutionBase):
     def part2(self, data: list[str]) -> int:
         data = data if not self.is_test else ["1", "2", "3", "2024"]
 
-        profits: defaultdict[tuple, int] = defaultdict(int)
+        profits: defaultdict[tuple[int, ...], int] = defaultdict(int)
         for num_str in data:
             number: int = int(num_str)
 
             changes_in_price: list[int] = []
             previous_price: int = number % 10
-            seen_sequences: set[tuple] = set()
+            seen_sequences: set[tuple[int, ...]] = set()
 
             for _ in range(2_000):
                 number = (number ^ (number * 64)) % 16_777_216
@@ -47,7 +47,7 @@ class Solution(SolutionBase):
                 if len(changes_in_price) < 4:
                     continue
 
-                sequence: tuple = tuple(changes_in_price[-4:])
+                sequence: tuple[int, ...] = tuple(changes_in_price[-4:])
 
                 if sequence in seen_sequences:
                     continue

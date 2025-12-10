@@ -18,7 +18,7 @@ class Solution(SolutionBase):
             [(start_row, start_col, facing, 0)]
         )
 
-        seen_positions = dict()
+        seen_positions: dict[tuple[int, int, tuple[int, int]], int] = dict()
         minval = sys.maxsize
 
         while next_move:
@@ -65,7 +65,7 @@ class Solution(SolutionBase):
         minval = sys.maxsize
         best_path: set[tuple[int, int]] = set()
 
-        seen_positions = {}
+        seen_positions: dict[tuple[int, int, tuple[int, int]], int] = dict()
         while next_move:
             row, col, facing, steps, path = next_move.popleft()
 

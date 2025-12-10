@@ -12,7 +12,7 @@ class Solution(SolutionBase):
         WIDTH = 101 if not self.is_test else 11
         HEIGHT = 103 if not self.is_test else 7
 
-        robots = list()
+        robots: list[tuple[tuple[int, int], tuple[int, int]]] = list()
 
         for robot in data:
             nums = h.extract_numbers_with_signs(robot)
@@ -41,7 +41,7 @@ class Solution(SolutionBase):
         return total
 
     def part2(self, data: list[str]) -> int:
-        robots = list()
+        robots: list[tuple[tuple[int, int], tuple[int, int]]] = list()
 
         for robot in data:
             nums = h.extract_numbers_with_signs(robot)
@@ -64,7 +64,7 @@ class Solution(SolutionBase):
             if time in blacklisted_times:
                 continue
 
-            positions = set()
+            positions: set[tuple[int, int]] = set()
 
             for robot in robots:
                 x, y = robot[0]

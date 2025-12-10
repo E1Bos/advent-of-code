@@ -16,7 +16,7 @@ class Solution(SolutionBase):
         return self.solve_antennas(data, True)
 
     def find_antennas(self, grid: list[list[str]]) -> dict[str, list[tuple[int, int]]]:
-        antennas = defaultdict(list)
+        antennas: defaultdict[str, list[tuple[int, int]]] = defaultdict(list)
         for row in range(len(grid)):
             for col in range(len(grid[row])):
                 if grid[row][col] != ".":
@@ -24,8 +24,8 @@ class Solution(SolutionBase):
         return antennas
 
     def solve_antennas(self, grid: list[list[str]], part2: bool = False) -> int:
-        part_1_antinodes = set()
-        part_2_antinodes = set()
+        part_1_antinodes: set[tuple[int, int]] = set()
+        part_2_antinodes: set[tuple[int, int]] = set()
 
         antennas = self.find_antennas(grid)
 

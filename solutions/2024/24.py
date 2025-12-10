@@ -69,7 +69,7 @@ class Solution(SolutionBase):
         commands: dict[str, tuple[str, str, str]]
         wires, commands = data
 
-        command_graph: nx.DiGraph = nx.DiGraph(
+        command_graph: nx.DiGraph[str] = nx.DiGraph(
             {dst: [src1, src2] for dst, (src1, src2, _) in commands.items()}
         )
         sorted_command_graph: list[str] = list(nx.topological_sort(command_graph))[::-1]
@@ -111,7 +111,7 @@ class Solution(SolutionBase):
                 - {
                     next(
                         output
-                        for (output, (wire1, wire2, operation)) in commands.items()
+                        for (output, (wire1, wire2, _)) in commands.items()
                         if "x00" in (wire1, wire2)
                     ),
                     "z45",

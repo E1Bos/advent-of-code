@@ -28,7 +28,7 @@ class Solution(SolutionBase):
     seen_dict: dict[tuple[int, int], int] = dict()
 
     def split_number(self, num: int) -> tuple[int, int]:
-        if num in self.seen_dict:
+        if num in self.split_dict:
             return self.split_dict[num]
 
         strNum = str(num)

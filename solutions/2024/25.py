@@ -6,8 +6,8 @@ class Solution(SolutionBase):
     raw_input: bool = True
 
     def parse(self, data: str) -> tuple[list[list[int]], ...]:
-        locks = []
-        keys = []
+        locks: list[list[int]] = []
+        keys: list[list[int]] = []
 
         split_data = h.split_groups(data)
         for item in split_data:

@@ -9,7 +9,7 @@ class Solution(SolutionBase):
         return h.lmap(int, data)
 
     def part1(self, data: list[int]) -> int:
-        parsed_disk = []
+        parsed_disk: list[int] = []
         disk_ID = 0
         is_free_space = False
 
@@ -45,8 +45,8 @@ class Solution(SolutionBase):
         return check_sum
 
     def part2(self, data: list[int]) -> int:
-        files = {}
-        spaces = []
+        files: dict[int, tuple[int, int]] = {}
+        spaces: list[tuple[int, int]] = []
 
         file_id = 0
         position = 0

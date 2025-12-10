@@ -62,7 +62,7 @@ class Solution(SolutionBase):
 
                 sides = 0
                 for position in crop_perimiters.values():
-                    seen_perimiters = set()
+                    seen_perimiters: set[tuple[int, int]] = set()
 
                     for row, col in position:
                         if (row, col) in seen_perimiters:

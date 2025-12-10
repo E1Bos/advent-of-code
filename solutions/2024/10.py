@@ -9,7 +9,7 @@ class Solution(SolutionBase):
         return h.gridify_ints(data)
 
     def part1(self, data: list[list[int]]) -> int:
-        total_distinct = list()
+        total_distinct: list[tuple[int, int]] = list()
 
         for row in range(len(data)):
             for col in range(len(data[row])):

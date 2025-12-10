@@ -15,14 +15,14 @@ class Solution(SolutionBase):
             connections[comp1] += [comp2]
             connections[comp2] += [comp1]
 
-        groups_of_three = set()
+        groups_of_three: set[tuple[str, ...]] = set()
         for comp1 in connections:
             for comp2 in connections[comp1]:
                 if comp2 == comp1:
                     continue
                 for comp3 in connections[comp2]:
                     if comp3 != comp1 and comp1 in connections[comp3]:
-                        group = tuple(sorted([comp1, comp2, comp3]))
+                        group: tuple[str, ...] = tuple(sorted([comp1, comp2, comp3]))
                         groups_of_three.add(group)
 
         return sum(
@@ -49,10 +49,10 @@ class Solution(SolutionBase):
                 for node1 in nodes
             )
 
-        groups = []
-        remaining_groups = sorted(list(connections.keys()))
+        groups: list[list[str]] = []
+        remaining_groups: list[str] = sorted(list(connections.keys()))
         while remaining_groups:
-            current_group = [remaining_groups.pop(0)]
+            current_group: list[str] = [remaining_groups.pop(0)]
             changed = True
 
             while changed:

@@ -19,22 +19,22 @@ class Solution(SolutionBase):
 
     def get_output(self, registers: dict[str, int], program: list[int]) -> list[int]:
         program_pointer = 0
-        A, B, C = registers["A"], registers["B"], registers["C"]
+        reg_A, reg_B, reg_C = registers["A"], registers["B"], registers["C"]
 
-        output = []
+        output: list[str] = []
 
         while program_pointer < len(program):
 
-            def get_operand_meaning(operand):
+            def get_operand_meaning(operand: int) -> int:
                 if operand >= 7:
                     raise ValueError("Invalid operand")
 
                 if operand == 4:
-                    return A
+                    return reg_A
                 elif operand == 5:
-                    return B
+                    return reg_B
                 elif operand == 6:
-                    return C
+                    return reg_C
 
                 return operand
 
@@ -44,22 +44,24 @@ class Solution(SolutionBase):
 
             match opcode:
                 case 0:
-                    A = A >> operand
+                    reg_A = reg_A >> operand
                 case 1:
-                    B = B ^ operand_literal
+                    reg_B = reg_B ^ operand_literal
                 case 2:
-                    B = operand % 8
+                    reg_B = operand % 8
                 case 3:
-                    if A != 0:
+                    if reg_A != 0:
                         program_pointer = operand_literal - 2
                 case 4:
-                    B = B ^ C
+                    reg_B = reg_B ^ reg_C
                 case 5:
                     output.extend([num for num in str(operand % 8)])
                 case 6:
-                    B = A >> operand
+                    reg_B = reg_A >> operand
                 case 7:
-                    C = A >> operand
+                    reg_C = reg_A >> operand
+                case _:
+                    raise ValueError("Invalid opcode")
 
             program_pointer += 2
 

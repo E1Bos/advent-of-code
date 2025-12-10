@@ -55,7 +55,7 @@ class Solution(SolutionBase):
         self, grid_size: int, bad_spaces: list[tuple[int, int]]
     ) -> int | None:
         min_steps = None
-        seen_positions = set()
+        seen_positions: set[tuple[int, int]] = set()
         queue = deque([(0, 0, 0)])
 
         while queue:

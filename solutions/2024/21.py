@@ -32,7 +32,7 @@ class Solution(SolutionBase):
         ">": (0, 1),
     }
 
-    memo = {}
+    memo: dict[tuple[str, int, int], int] = {}
 
     def parse(self, data: list[str]) -> list[str]:
         return data

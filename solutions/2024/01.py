@@ -13,7 +13,9 @@ class Solution(SolutionBase):
         return abs(point1 - point2)
 
     def part1(self, data: list[str]) -> int:
-        left_side, right_side = [], []
+        left_side: list[int] = []
+        right_side: list[int] = []
+
         for line in data:
             left_num, right_num = h.extract_numbers(line)
             left_side.append(left_num)
