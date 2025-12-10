@@ -18,11 +18,10 @@ class Solution(SolutionBase):
                 if cell == ".":
                     continue
 
-                adjacent_positions: list[tuple[int, int]] = h.find_adjacent(
+                adjacent_str: list[str] = h.get_adjacent(
                     data, row, col, include_diagonal=True
                 )
 
-                adjacent_str: list[str] = [data[r][c] for r, c in adjacent_positions]
                 adjacent_count: int = adjacent_str.count("@")
 
                 if adjacent_count < 4:
@@ -46,13 +45,10 @@ class Solution(SolutionBase):
                     if cell == ".":
                         continue
 
-                    adjacent_positions: list[tuple[int, int]] = h.find_adjacent(
+                    adjacent_str: list[str] = h.get_adjacent(
                         data, row, col, include_diagonal=True
                     )
 
-                    adjacent_str: list[str] = [
-                        data[r][c] for r, c in adjacent_positions
-                    ]
                     adjacent_count: int = adjacent_str.count("@")
 
                     if adjacent_count < 4:

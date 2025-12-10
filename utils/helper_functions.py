@@ -1,5 +1,8 @@
 import re
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, TypeVar, Literal, overload
+
+T = TypeVar("T")
+U = TypeVar("U")
 
 
 # region String Processing
@@ -107,7 +110,7 @@ def extract_numbers_to_string(text: str) -> str:
     return " ".join(re.findall(r"\d+", text))
 
 
-def find_in_grid(grid: list[list[Any]], target: Any) -> tuple[int, int] | None:
+def find_in_grid(grid: list[list[T]], target: T) -> tuple[int, int] | None:
     """
     Finds the first occurrence of a target in a 2D grid of strings and returns its position as a tuple of integers (row, col).
 
@@ -156,13 +159,13 @@ def outside_grid(
     return row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0])
 
 
-def find_in_grid_or_error(grid: list[list[Any]], target: Any) -> tuple[int, int]:
+def find_in_grid_or_error(grid: list[list[T]], target: T) -> tuple[int, int]:
     """
     Finds the first occurrence of a target in a 2D grid of strings and returns its position as a tuple of integers (row, col).
 
     Args:
-        grid (list[list[Any]]): The 2D grid of strings to search in.
-        target (Any): The target string to search for.
+        grid (list[list[T]]): The 2D grid of strings to search in.
+        target (T): The target string to search for.
 
     Returns:
         tuple[int, int]: The position of the target in the grid as a tuple of two integers (row, col).
@@ -263,16 +266,16 @@ def char_frequency(text: str) -> dict[str, int]:
     return {char: text.count(char) for char in text}
 
 
-def lmap(func: Callable[[Any], Any], *iterables: Iterable[Any]) -> list[Any]:
+def lmap(func: Callable[[T], U], *iterables: Iterable[T]) -> list[U]:
     """
     Maps the given function to the elements of the input iterables and returns the results as a list.
 
     Args:
-        func: The function to apply to the elements.
-        *iterables: The input iterables to be processed.
+        func (Callable[[T], U]): The function to apply to the elements.
+        *iterables (Iterable[T]): The input iterables to be processed.
 
     Returns:
-        list[Any]: A list of the results after applying the function to the elements of the input iterables.
+        list[U]: A list of the results after applying the function to the elements of the input iterables.
 
     Example:
         >>> lmap(lambda x: x * 2, [1, 2, 3])
@@ -560,25 +563,47 @@ def find_adjacent(
     return adjacent
 
 
+@overload
 def get_adjacent(
-    matrix: list[list[Any]],
+    matrix: list[list[T]],
+    row: int,
+    col: int,
+    include_diagonal: bool = False,
+    *,
+    include_coords: Literal[False] = False,
+) -> list[T]: ...
+
+
+@overload
+def get_adjacent(
+    matrix: list[list[T]],
+    row: int,
+    col: int,
+    include_diagonal: bool = False,
+    *,
+    include_coords: Literal[True],
+) -> list[tuple[T, int, int]]: ...
+
+
+def get_adjacent(
+    matrix: list[list[T]],
     row: int,
     col: int,
     include_diagonal: bool = False,
     include_coords: bool = False,
-) -> list[Any] | list[tuple[Any, int, int]]:
+) -> list[T] | list[tuple[T, int, int]]:
     """
     Gets all adjacent cells in the given matrix.
 
     Args:
-        matrix (list[list[Any]]): A 2D list representing the matrix to search in.
+        matrix (list[list[T]]): A 2D list representing the matrix to search in.
         row (int): The row of the cell to search from.
         col (int): The column of the cell to search from.
         include_diagonal (bool): Whether to include diagonal adjacent cells (default is False).
         include_coords (bool): Whether to include the coordinates of the adjacent cells in the output (default is False).
 
     Returns:
-        list[Any] | list[tuple[Any, int, int]]: A list of all adjacent cells (up, down, left, right) with their values or as tuples of (value, row, col).
+        list[T] | list[tuple[T, int, int]]: A list of all adjacent cells (up, down, left, right) with their values or as tuples of (value, row, col).
 
     Example:
         >>> get_adjacent([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1, 1)
