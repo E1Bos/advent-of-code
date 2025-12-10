@@ -10,6 +10,7 @@ dependencies = [
     "pygments>=2.19.2",
     "pyinstrument>=5.1.1",
     "pyperclip>=1.11.0",
+    "pyyaml>=6.0.3",
     "rich>=14.2.0",
     "ruff>=0.14.8",
 ]

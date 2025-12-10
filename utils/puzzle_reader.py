@@ -49,11 +49,7 @@ class PuzzleReader:
         try:
             PuzzleReader.__is_valid_file(file_path)
         except (FileNotFoundError, ValueError) as e:
-            (
-                context.print_error(str(e))
-                if not is_test
-                else context.print_warning(str(e))
-            )
+            context.print_error(str(e))
             return None
 
         with open(file_path, "r") as f:

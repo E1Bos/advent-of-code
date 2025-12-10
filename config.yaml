@@ -1,0 +1,38 @@
+# Advent of Code Runner Configuration
+# All values are optional and will use sensible defaults if not specified
+
+# Default year (null = current year) (Default: null)
+year: null
+
+# Default day (null = current day) (Default: null)
+day: null
+
+# Default part to run (1 or 2) (Default: 1)
+part: 1
+
+# Automatically create missing files if they don't exist (Default: true)
+create_missing_files: true
+
+# Run tests before executing solution (Default: true)
+run_tests: true
+
+# Run code quality checks (ruff check, ruff format, doctests) before executing solution (Default: false)
+run_quality_checks: false
+
+# Automatically fix ruff issues when running quality checks (Default: true)
+auto_fix_quality: true
+
+# Show timing information for solutions (Default: false)
+show_timing: false
+
+# Copy result to clipboard after solving (Default: false)
+copy_to_clipboard: false
+
+# Enable debug output from solutions (Default: false)
+debug: false
+
+# Logging level for file output (DEBUG, INFO, WARNING, ERROR) (Default: INFO)
+log_level: INFO
+
+# Log file path (Default: logs/log.log)
+log_path: logs/log.log

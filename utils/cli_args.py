@@ -19,6 +19,7 @@ class Args:
         create (bool): Whether to create the necessary files for the specified year and day.
         timeit (bool): Whether to time the execution of the solution.
         profile (bool): Whether to profile the execution of the solution.
+        quality (bool): Whether to run code quality checks before the solution.
         debug (bool): Whether to run the solution in debug mode.
 
     Properties:
@@ -36,6 +37,7 @@ class Args:
     create: bool = False
     timeit: bool = False
     profile: bool = False
+    quality: bool = False
     debug: bool = False
 
     @property

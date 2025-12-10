@@ -152,6 +152,9 @@ class SolutionBase:
         self.is_test: bool = True
         test_input: Any = self.__get_test_input()
 
+        if test_input is None:
+            return not self.skip_empty_tests
+
         try:
             expected_result: Any = self.__get_test_results(part)
         except ValueError as e:

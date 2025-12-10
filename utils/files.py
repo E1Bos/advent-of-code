@@ -13,7 +13,10 @@ class Files:
 
     @staticmethod
     def create_day(
-        context: OutputHandler, args: Args, ok_if_exists: bool = False
+        context: OutputHandler,
+        args: Args,
+        force_create: bool = False,
+        only_data: bool = False,
     ) -> None:
         """
         Create the necessary files and directories for a new day's puzzle.
@@ -21,7 +24,8 @@ class Files:
         Args:
             context (OutputHandler): The output handler for the program.
             args (Args): The parsed command-line arguments.
-            ok_if_exists (bool, optional): If True, will overwrite the file if it already exists. Defaults to False.
+            force_create (bool, optional): If True, will overwrite the file if it already exists. Defaults to False.
+            only_data (bool, optional): If True, will only create data files and directories, skipping solution file creation. Defaults to False.
 
         Raises:
             ValueError: If year is not a 4-digit number.
@@ -33,7 +37,8 @@ class Files:
 
         Files.__create_directories(path, args.year_str)
         Files.__create_data_files(path, args)
-        Files.__create_solution_file(context, path, args, ok_if_exists)
+        if not only_data:
+            Files.__create_solution_file(context, path, args, force_create)
 
     @staticmethod
     def __create_directories(path: Path, year_str: str) -> None:
@@ -88,7 +93,7 @@ class Files:
         context: OutputHandler,
         path: Path,
         args: Args,
-        ok_if_exists: bool,
+        force_create: bool,
     ) -> None:
         """
         Create a new solution file for the specified year and day.
@@ -97,7 +102,7 @@ class Files:
             context (OutputHandler): The output handler for the program.
             path (Path): The path to the grandparent directory of the current file.
             args (Args): The parsed command-line arguments.
-            ok_if_exists (bool): If True, will overwrite the file if it already exists.
+            force_create (bool): If True, will overwrite the file if it already exists.
         """
         solution_folder: Path = Path(path, "solutions", args.year_str)
         template_file: Path = Path("utils/templates/python_template.py")
@@ -110,7 +115,7 @@ class Files:
         template_content = Files.__edit_template(template_content)
 
         file_path: Path = Path(solution_folder, f"{args.day_str}.py")
-        if not file_path.exists() or ok_if_exists:
+        if not file_path.exists() or force_create:
             with open(file_path, "w+") as f:
                 f.write(template_content)
             context.print_ok(f"Created file: [cyan]{file_path}[/cyan] and data files")
