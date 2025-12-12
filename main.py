@@ -586,17 +586,23 @@ class AdventRunner:
             if not self._check_and_create_files():
                 sys.exit(0)
 
-            solution_module = self._import_solution_module()
-            if solution_module is None:
+            solution_module: ModuleType | None = self._import_solution_module()
+            if solution_module is None or not hasattr(solution_module, "Solution"):
+                self._context.print_error(
+                    "The solution module does not have a 'Solution' class."
+                )
+                self._context.log(
+                    ERROR, "Missing 'Solution' class in the solution module."
+                )
                 sys.exit(1)
 
             self._current_operation = "Instantiating solution"
-            self._solution = solution_module.Solution(
+            self._solution = getattr(solution_module, "Solution")(
                 context=self._context,
                 args=self._args,
             )
 
-            parts = [1, 2] if self._args.run_all else [self._args.part]
+            parts: list[int] = [1, 2] if self._args.run_all else [self._args.part]
 
             self._context.log(
                 INFO, f"Running Day {self._args.year}/{self._args.day} | Part {parts}"

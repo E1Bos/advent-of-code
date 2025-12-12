@@ -57,7 +57,7 @@ class ProjectDocTestLoader:
 
             for file in files:
                 # Check for Python files, excluding this test script itself
-                if file.endswith(".py") and file != os.path.basename(__file__):
+                if str(file).endswith(".py") and file != os.path.basename(__file__):
                     file_path: Path = Path(root) / file
 
                     try:
@@ -128,6 +128,22 @@ class CodeQualityTests(unittest.TestCase):
             self.fail(f"Ruff format check failed:\n{e.stdout}\n{e.stderr}")
         except FileNotFoundError:
             self.skipTest("Ruff executable not found")
+
+    def test_types(self) -> None:
+        """Run ty type checking"""
+        root: Path = Path(__file__).parent.parent
+        try:
+            subprocess.run(
+                ["ty", "check"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as e:
+            self.fail(f"Ty type check failed:\n{e.stdout}\n{e.stderr}")
+        except FileNotFoundError:
+            self.skipTest("Ty executable not found")
 
     def test_docstring_format(self) -> None:
         """Check that all functions/classes have properly formatted docstrings"""

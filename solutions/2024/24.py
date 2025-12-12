@@ -2,7 +2,7 @@ from typing import Callable
 from utils.solution_base import SolutionBase
 import utils.helper_functions as h
 from collections import defaultdict
-import networkx as nx
+import networkx as nx  # type: ignore
 
 
 class Solution(SolutionBase):

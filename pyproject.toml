@@ -12,5 +12,6 @@ dependencies = [
     "pyperclip>=1.11.0",
     "pyyaml>=6.0.3",
     "rich>=14.2.0",
-    "ruff>=0.14.8",
+    "ruff>=0.14.9",
+    "ty>=0.0.1a33",
 ]

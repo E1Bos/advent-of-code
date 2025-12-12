@@ -66,7 +66,7 @@ class SolutionBase:
 
         # Override the built-in print function
         if self.override_print:
-            builtins.print = self.print
+            builtins.print = self.print  # type: ignore
 
     def parse(self, data: Any) -> Any:
         """Parse the input data into a usable format."""
